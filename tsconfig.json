@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    // Compilation
+    "module": "NodeNext",
+    "target": "ES2020",
+    "sourceMap": false,
+    "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "composite": true,
+    "useDefineForClassFields": true,
+    "moduleDetection": "force",
+    // Linting
+    "strict": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    // Includes
+    "lib": [
+      "ESNext",
+      "DOM",
+    ],
+    // Output
+    "outDir": "dist",
+    "rootDir": "lib",
+  },
+  "include": [
+    "lib/**/*.ts",
+  ],
+  "exclude": [
+    "**/__tests__/*.ts"
+  ],
+  "tsBuildInfoFile": "node_modules/.tmp/tsconfig.tsbuildinfo",
+}

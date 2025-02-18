@@ -1,0 +1,13 @@
+# Directories
+dist
+.env
+node_modules
+
+# TypeScript
+*.tsbuildinfo
+.tscache
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

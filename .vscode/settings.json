@@ -1,0 +1,47 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/dist": false,
+    "**/*.tsbuildinfo": true,
+    "**/node_modules": true,
+  },
+  // ----------------------- Client ----------------------- 
+  // Code Quality
+  "files.eol": "\n",
+  "typescript.format.enable": true,
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "eslint.workingDirectories": [
+    ".",
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+  ],
+  "eslint.useFlatConfig": true,
+  // TypeScript
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "[typescript]": {
+    "editor.codeLens": true,
+    "editor.suggest.showReferences": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  // Javascript
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+}
