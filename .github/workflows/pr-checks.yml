@@ -9,7 +9,6 @@ on:
 env:
   CI: true
   NODE_VERSION: 20
-  ENV_ARTIFACT_NAME: workspace
 
 jobs:
   setup:
@@ -40,24 +39,14 @@ jobs:
           key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
-      
-      - name: 🌦️ Upload scaffolded env
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ENV_ARTIFACT_NAME }}
-          path: .
-          retention-days: 1
   
   lint:
     name: Lint 🔎
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      - name: 📥 Download environment
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.ENV_ARTIFACT_NAME }}
-          path: .
+      - name: 🏃‍♂️ Checkout Repo
+        uses: actions/checkout@v4
 
       - name: 🔨 Setup pnpm
         uses: pnpm/action-setup@v4
@@ -69,6 +58,17 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
+      
+      - name: 💥 Init pnpm dependencies
+        run: pnpm install
+      
+      - name: 💾 Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
       
       - name: 🔎 Lint codebase
         run: pnpm lint
@@ -78,11 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      - name: 📥 Download environment
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.ENV_ARTIFACT_NAME }}
-          path: .
+      - name: 🏃‍♂️ Checkout Repo
+        uses: actions/checkout@v4
       
       - name: 🔨 Setup pnpm
         uses: pnpm/action-setup@v4
@@ -94,6 +91,17 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
+
+      - name: 💥 Init pnpm dependencies
+        run: pnpm install
+      
+      - name: 💾 Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
       
       - name: 🧪 Test codebase
         run: pnpm test
@@ -104,11 +112,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      - name: 📥 Download environment
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.ENV_ARTIFACT_NAME }}
-          path: .
+      - name: 🏃‍♂️ Checkout Repo
+        uses: actions/checkout@v4
 
       - name: 🔨 Setup pnpm
         uses: pnpm/action-setup@v4
@@ -120,6 +125,17 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
+
+      - name: 💥 Init pnpm dependencies
+        run: pnpm install
+      
+      - name: 💾 Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
       
       - name: ⚒️ Compile
         run: pnpm build
