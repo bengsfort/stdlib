@@ -59,6 +59,11 @@ jobs:
           name: ${{ env.ENV_ARTIFACT_NAME }}
           path: .
 
+      - name: 🔨 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
@@ -78,6 +83,11 @@ jobs:
         with:
           name: ${{ env.ENV_ARTIFACT_NAME }}
           path: .
+      
+      - name: 🔨 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
       - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
@@ -99,6 +109,11 @@ jobs:
         with:
           name: ${{ env.ENV_ARTIFACT_NAME }}
           path: .
+
+      - name: 🔨 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
       - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
