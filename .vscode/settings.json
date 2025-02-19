@@ -26,6 +26,10 @@
     "typescriptreact",
   ],
   "eslint.useFlatConfig": true,
+  "editor.detectIndentation": true,
+  "editor.insertSpaces": true,
+  "editor.indentSize": "tabSize",
+  "editor.tabSize": 2,
   // TypeScript
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "[typescript]": {
