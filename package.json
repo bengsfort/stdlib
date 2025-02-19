@@ -24,16 +24,19 @@
       "default": "./dist/**/*.js",
       "import": "./dist/**/*.js",
       "types": "./dist/**/*.d.ts"
-    }
+    },
+    "./internal/*": null
   },
+  "prettier": "@bengsfort/eslint-config-flat/prettier.config.js",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "watch": "tsc --project tsconfig.json --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "watch": "tsc --project tsconfig.build.json --watch",
     "test": "vitest",
     "lint": "eslint"
   },
   "devDependencies": {
-    "@bengsfort/eslint-config-flat": "^0.2.2",
+    "@bengsfort/eslint-config-flat": "^0.2.4",
+    "@types/node": "^22.13.4",
     "eslint": "^9.20.1",
     "typescript": "^5.7.3",
     "vitest": "^3.0.6"

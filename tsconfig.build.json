@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.build.tsbuildinfo",
+    "composite": true,
+    // Output
+    "outDir": "dist",
+    "rootDir": "lib",
+  },
+  "include": [
+    "lib/**/*.ts",
+  ],
+  "exclude": [
+    "**/__tests__/*.ts",
+  ],
+}

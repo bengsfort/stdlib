@@ -1,33 +1,59 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable no-console */
 
-export interface Logger {
-  log: typeof console.log;
-  warn: typeof console.warn;
-  info: typeof console.info;
-  error: typeof console.error;
-  subscope: (...subscopes: string[]) => Logger;
+import { getCurrentTimestamp, Logger } from './internal/logging-utils.js';
+
+// Runtime cache for re-using loggers to reduce memory footprint.
+const cache = new Map<string, Logger>();
+
+interface Opts {
+  showTimestamp: boolean;
 }
 
-type CreateLoggerFn = (...scopes: string[]) => Logger;
+const DefaultOpts: Opts = {
+  showTimestamp: true,
+} as const;
 
-export const makeLogger: CreateLoggerFn = (...scopes: string[]): Logger => {
-  const scopeStr = scopes.join(":");
-  const prefix = `[${scopeStr}]`;
+/**
+ * Factory for creating a Logger instance.
+ * @param scopes
+ * @returns
+ */
+export function makeLogger(scope: string, opts: Partial<Opts> = {}): Logger {
+  const config: Opts = {
+    ...DefaultOpts,
+    ...opts,
+  };
 
-  return {
+  // Check for an existing logger. If one exists return it.
+  // This enforces singular loggers per scope, and prevents memory bloat from
+  // using the same scope in multiple files.
+  const existing = cache.get(scope);
+  if (existing) {
+    return existing;
+  }
+
+  const prefix = `[${scope}]`;
+  const logger: Logger = {
     log: (...data): void => {
-      console.log(prefix, ...data);
+      const datestr = config.showTimestamp ? `${getCurrentTimestamp()} ` : '';
+      console.log(datestr + prefix, ...data);
     },
     warn: (...data): void => {
-      console.warn(prefix, ...data);
+      const datestr = config.showTimestamp ? `${getCurrentTimestamp()} ` : '';
+      console.warn(datestr + prefix, ...data);
     },
     info: (...data): void => {
-      console.info(prefix, ...data);
+      const datestr = config.showTimestamp ? `${getCurrentTimestamp()} ` : '';
+      console.info(datestr + prefix, ...data);
     },
     error: (...data): void => {
-      console.error(prefix, ...data);
+      const datestr = config.showTimestamp ? `${getCurrentTimestamp()} ` : '';
+      console.error(datestr + prefix, ...data);
     },
-    subscope: (...subscopes): Logger => makeLogger(scopeStr, ...subscopes),
+    subscope: (...subscopes): Logger =>
+      makeLogger([scope, ...subscopes].join(':'), config),
   };
-};
+
+  cache.set(scope, logger);
+  return logger;
+}

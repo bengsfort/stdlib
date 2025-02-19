@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tests.tsbuildinfo",
+    "composite": true,
+    "allowJs": true,
+    // Output
+    "noEmit": true,
+  },
+  "include": [
+    "lib/**/*.ts",
+    "**/__tests__/*.ts",
+    "eslint.config.js",
+  ],
+}

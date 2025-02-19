@@ -7,10 +7,10 @@
  */
 function isErrorWithMessage(error: unknown): error is Error {
   return (
-    typeof error === "object" &&
+    typeof error === 'object' &&
     error !== null &&
-    "message" in error &&
-    typeof (error as Record<string, unknown>).message === "string"
+    'message' in error &&
+    typeof (error as Record<string, unknown>).message === 'string'
   );
 }
 
@@ -30,11 +30,11 @@ function toErrorWithMessage(maybeError: unknown): Error {
   }
 
   try {
-    if (typeof maybeError === "string") {
+    if (typeof maybeError === 'string') {
       return new Error(maybeError);
     }
 
-    if (typeof maybeError === "number") {
+    if (typeof maybeError === 'number') {
       return new Error(String(maybeError));
     }
 
