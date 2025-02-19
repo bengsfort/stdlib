@@ -29,16 +29,18 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: 💥 Install deps
-        run: pnpm install
-      
       - name: 💾 Cache dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
+          path: |
+            ~/.pnpm-store
+            ./node_modules
           key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
+
+      - name: 💥 Install deps
+        run: pnpm install
   
   lint:
     name: Lint 🔎
@@ -58,17 +60,21 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-      
-      - name: 💥 Init pnpm dependencies
-        run: pnpm install
-      
+
       - name: 💾 Cache dependencies
         uses: actions/cache@v4
+        id: cache
         with:
-          path: ~/.pnpm-store
+          path: |
+            ~/.pnpm-store
+            ./node_modules
           key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
+      
+      - name: 💥 Init pnpm dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install
       
       - name: 🔎 Lint codebase
         run: pnpm lint
@@ -92,16 +98,20 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: 💥 Init pnpm dependencies
-        run: pnpm install
-      
       - name: 💾 Cache dependencies
         uses: actions/cache@v4
+        id: cache
         with:
-          path: ~/.pnpm-store
+          path: |
+            ~/.pnpm-store
+            ./node_modules
           key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
+        
+      - name: 💥 Init pnpm dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install
       
       - name: 🧪 Test codebase
         run: pnpm test
@@ -126,16 +136,20 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      - name: 💥 Init pnpm dependencies
-        run: pnpm install
-      
       - name: 💾 Cache dependencies
         uses: actions/cache@v4
+        id: cache
         with:
-          path: ~/.pnpm-store
+          path: |
+            ~/.pnpm-store
+            ./node_modules
           key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
+      
+      - name: 💥 Init pnpm dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install
       
       - name: ⚒️ Compile
         run: pnpm build
