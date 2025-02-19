@@ -1,0 +1,45 @@
+name: Check PR
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+env:
+  CI: true
+
+jobs:
+  check_pr:
+    name: Check PR 🔎
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+    
+    steps:
+      - name: 🏃‍♂️ Checkout Repo
+        uses: actions/checkout@v4
+      
+      - name: 🔨 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: 🧨 Setup Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: 💥 Install deps
+        run: pnpm install
+      
+      - name: 🔎 Lint codebase
+        run: pnpm lint
+      
+      - name: 🧪 Test codebase
+        run: pnpm test
+      
+      - name: ⚒️ Compile
+        run: pnpm build
