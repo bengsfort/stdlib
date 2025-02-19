@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tests.tsbuildinfo",
+    "tsBuildInfoFile": "./.tsbuildinfo/tsconfig.tests.tsbuildinfo",
     "composite": true,
     "allowJs": true,
     // Output

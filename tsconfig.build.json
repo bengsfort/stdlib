@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.build.tsbuildinfo",
+    "tsBuildInfoFile": "./.tsbuildinfo/tsconfig.build.tsbuildinfo",
     "composite": true,
     // Output
     "outDir": "dist",

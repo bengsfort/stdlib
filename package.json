@@ -27,17 +27,28 @@
     },
     "./internal/*": null
   },
+  "files": [
+    "README.md",
+    "LICENSE.md",
+    "CHANGELOG.md",
+    "package.json",
+    "pnpm-lock.yaml",
+    "dist"
+  ],
   "prettier": "@bengsfort/eslint-config-flat/prettier.config.js",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "watch": "tsc --project tsconfig.build.json --watch",
+    "clean": "rimraf ./dist/* ./.tsbuildinfo/*",
     "test": "vitest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prepublishOnly": "pnpm run clean && pnpm run build"
   },
   "devDependencies": {
     "@bengsfort/eslint-config-flat": "^0.2.4",
     "@types/node": "^22.13.4",
     "eslint": "^9.20.1",
+    "rimraf": "^6.0.1",
     "typescript": "^5.7.3",
     "vitest": "^3.0.6"
   }
