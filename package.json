@@ -3,7 +3,7 @@
   "description": "A collection of utilities that I am tired of re-implementing",
   "author": "Matt Bengston <bengsfort@gmail.com> (https://bengsfort.dev)",
   "homepage": "https://github.com/bengsfort/stdlib",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "bugs": {
     "url": "https://github.com/bengsfort/stdlib/issues"
   },
