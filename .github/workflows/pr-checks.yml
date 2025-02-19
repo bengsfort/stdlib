@@ -8,14 +8,13 @@ on:
 
 env:
   CI: true
+  NODE_VERSION: 20
+  ENV_ARTIFACT_NAME: workspace
 
 jobs:
-  check_pr:
-    name: Check PR 🔎
+  setup:
+    name: 🏗️ Scaffold env
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
     
     steps:
       - name: 🏃‍♂️ Checkout Repo
@@ -26,20 +25,87 @@ jobs:
         with:
           run_install: false
 
-      - name: 🧨 Setup Node ${{ matrix.node-version }}
+      - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       - name: 💥 Install deps
         run: pnpm install
       
+      - name: 💾 Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+      
+      - name: 🌦️ Upload scaffolded env
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ENV_ARTIFACT_NAME }}
+          path: .
+          retention-days: 1
+  
+  lint:
+    name: Lint 🔎
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Download environment
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ENV_ARTIFACT_NAME }}
+          path: .
+
+      - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
       - name: 🔎 Lint codebase
         run: pnpm lint
+
+  test:
+    name: Test 🧪
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Download environment
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ENV_ARTIFACT_NAME }}
+          path: .
+
+      - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
       
       - name: 🧪 Test codebase
         run: pnpm test
+      
+
+  compile:
+    name: Compile ⚒️
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Download environment
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ENV_ARTIFACT_NAME }}
+          path: .
+
+      - name: 🧨 Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
       
       - name: ⚒️ Compile
         run: pnpm build
