@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { getErrorMessage } from '../errors.js';
+import { getErrorMessage } from '../helpers.js';
 
-describe('errors', () => {
+describe('errors/helpers', () => {
   describe('getErrorMessage', () => {
     it('should return the message of an error', () => {
       const message = 'message';
