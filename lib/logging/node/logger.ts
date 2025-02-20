@@ -1,6 +1,6 @@
 import console from 'node:console';
 
-import { getCurrentTimestamp, Logger } from '../internal/logging-utils.js';
+import { getCurrentTimestamp, Logger } from '../internal/utils.js';
 
 const cache = new Map<string, Logger>();
 

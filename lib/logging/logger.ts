@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { getCurrentTimestamp, Logger } from './internal/logging-utils.js';
+import { getCurrentTimestamp, Logger } from './internal/utils.js';
 
 // Runtime cache for re-using loggers to reduce memory footprint.
 const cache = new Map<string, Logger>();

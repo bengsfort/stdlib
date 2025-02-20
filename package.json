@@ -15,17 +15,22 @@
   },
   "type": "module",
   "exports": {
-    "./*": {
-      "default": "./dist/*.js",
-      "import": "./dist/*.js",
-      "types": "./dist/*.d.ts"
+    "./errors/*": {
+      "default": "./dist/errors/*.js",
+      "types": "./dist/errors/*.d.ts"
     },
-    "./**/*": {
-      "default": "./dist/**/*.js",
-      "import": "./dist/**/*.js",
-      "types": "./dist/**/*.d.ts"
+    "./math/*": {
+      "default": "./dist/math/*.js",
+      "types": "./dist/math/*.d.ts"
     },
-    "./internal/*": null
+    "./logging/*": {
+      "default": "./dist/logging/*.js",
+      "types": "./dist/logging/*.d.ts"
+    },
+    "./logging/node/*": {
+      "default": "./dist/logging/node/*.js",
+      "types": "./dist/logging/node/*.d.ts"
+    }
   },
   "files": [
     "README.md",
