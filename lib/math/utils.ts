@@ -1,10 +1,10 @@
 /**
  * Clamps a number between two boundaries.
  *
- * @param {number} value The Value to clamp.
- * @param {number} min The minimum boundary.
- * @param {number} max The maximum boundary.
- * @returns {number} The value calmped between the two boundaries.
+ * @param value The Value to clamp.
+ * @param min The minimum boundary.
+ * @param max The maximum boundary.
+ * @returns The value clamped between the two boundaries.
  */
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -13,12 +13,12 @@ export function clamp(value: number, min: number, max: number): number {
 /**
  * Transforms a value from one range to another.
  *
- * @param {number} value The value to interpolate.
- * @param {number} min1 The minimum value for the first range.
- * @param {number} max1 The maximum value for the first range.
- * @param {number} min2 The minimum value for the second range.
- * @param {number} max2 The maximum value for the second range.
- * @returns {number} The interpolated value.
+ * @param value The value to interpolate.
+ * @param min1 The minimum value for the first range.
+ * @param max1 The maximum value for the first range.
+ * @param min2 The minimum value for the second range.
+ * @param max2 The maximum value for the second range.
+ * @returns The interpolated value.
  */
 export function transformRange(
   value: number,
@@ -39,10 +39,10 @@ export function transformRange(
 /**
  * Interpolates a value between the start and end values.
  *
- * @param {number} start The lower boundary or initial value.
- * @param {number} target The target value.
- * @param {number} t the current lerp time.
- * @returns {number} The lerped value.
+ * @param start The lower boundary or initial value.
+ * @param target The target value.
+ * @param t the current lerp time.
+ * @returns The lerped value.
  */
 export function lerp(start: number, target: number, t: number): number {
   return start + (target - start) * t;
@@ -52,10 +52,10 @@ export function lerp(start: number, target: number, t: number): number {
  * Interpolates a value between the start and end values, clamping the result
  * to prevent extrapolation.
  *
- * @param {number} start The lower boundary or initial value.
- * @param {number} target The target value.
- * @param {number} t the current lerp time.
- * @returns {number} The lerped value.
+ * @param start The lower boundary or initial value.
+ * @param target The target value.
+ * @param t the current lerp time.
+ * @returns The lerped value.
  */
 export function lerpClamped(start: number, target: number, t: number): number {
   return clamp(lerp(start, target, t), start, target);
