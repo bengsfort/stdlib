@@ -1,20 +1,29 @@
 import { clamp, lerp } from './utils.js';
 
-export interface V3 {
+export interface IVec3 {
   x: number;
   y: number;
   z: number;
 }
 
-export class Vector3 implements V3 {
+type CtorArgs = [ref: IVec3] | [x?: number, y?: number, z?: number];
+
+export class Vector3 implements IVec3 {
   public x = 0;
   public y = 0;
   public z = 0;
 
-  constructor(x = 0, y = 0, z = 0) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+  constructor(...args: CtorArgs) {
+    const [first, second, third] = args;
+    if (Vector3.IsVec3Like(first)) {
+      this.x = first.x;
+      this.y = first.y;
+      this.z = first.z;
+    } else {
+      this.x = first ?? 0;
+      this.y = second ?? 0;
+      this.z = third ?? 0;
+    }
   }
 
   // Helpers
@@ -107,7 +116,7 @@ export class Vector3 implements V3 {
    * @param v2 Second Vector3.
    * @returns Whether the vectors are equal.
    */
-  public static Equals(v1: V3, v2: V3): boolean {
+  public static Equals(v1: IVec3, v2: IVec3): boolean {
     return v1.x === v2.x && v1.y === v2.y;
   }
 
@@ -118,7 +127,7 @@ export class Vector3 implements V3 {
    * @param t The amount to interpolate (0 being start, 1 being end, etc.)
    * @returns A new Vector3 with the result.
    */
-  public static Lerp(v1: V3, v2: V3, t: number): Vector3 {
+  public static Lerp(v1: IVec3, v2: IVec3, t: number): Vector3 {
     return new Vector3(lerp(v1.x, v2.x, t), lerp(v1.y, v2.y, t), lerp(v1.z, v2.z, t));
   }
 
@@ -127,8 +136,23 @@ export class Vector3 implements V3 {
    * @param vector The vector to normalize.
    * @returns A new Vector3 of the normalized vector.
    */
-  public static Normalize(vector: V3): Vector3 {
+  public static Normalize(vector: IVec3): Vector3 {
     return new Vector3(vector.x, vector.y, vector.z).normalize();
+  }
+
+  /**
+   * Asserts a given unknonwn value is Vector3-like.
+   * @param obj The value.
+   * @returns True if it is vec3-like.
+   */
+  public static IsVec3Like(obj: unknown): obj is IVec3 {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      Object.hasOwn(obj, 'x') &&
+      Object.hasOwn(obj, 'y') &&
+      Object.hasOwn(obj, 'z')
+    );
   }
 
   /**
@@ -161,7 +185,7 @@ export class Vector3 implements V3 {
    * @param other The other vector.
    * @returns Itself.
    */
-  public add(other: V3): this {
+  public add(other: IVec3): this {
     this.x += other.x;
     this.y += other.y;
     this.z += other.z;
@@ -173,7 +197,7 @@ export class Vector3 implements V3 {
    * @param other The other vector.
    * @returns Itself.
    */
-  public multiply(other: V3): this {
+  public multiply(other: IVec3): this {
     this.x *= other.x;
     this.y *= other.y;
     this.z *= other.z;
@@ -209,7 +233,7 @@ export class Vector3 implements V3 {
    * @param other The other vector.
    * @returns Itself.
    */
-  public divide(other: V3): this {
+  public divide(other: IVec3): this {
     this.x /= other.x;
     this.y /= other.y;
     this.z /= other.z;
@@ -244,7 +268,7 @@ export class Vector3 implements V3 {
    * @param t The amount to interpolate (0 being itself, 1 being target, etc.)
    * @returns Itself.
    */
-  public lerp(target: V3, t: number): this {
+  public lerp(target: IVec3, t: number): this {
     this.x = lerp(this.x, target.x, t);
     this.y = lerp(this.y, target.y, t);
     this.z = lerp(this.z, target.z, t);
@@ -313,7 +337,7 @@ export class Vector3 implements V3 {
    * @param val The vector to check equality.
    * @returns If the vectors are equal.
    */
-  public equals(val: V3): boolean {
+  public equals(val: IVec3): boolean {
     return val.x === this.x && val.y === this.y && val.z === this.z;
   }
 
@@ -321,7 +345,7 @@ export class Vector3 implements V3 {
    * Return a lightweight object literal with the x and y component.
    * @returns An object literal with the vector set to x, y.
    */
-  public toLiteral(): V3 {
+  public toLiteral(): IVec3 {
     return { x: this.x, y: this.y, z: this.z };
   }
 

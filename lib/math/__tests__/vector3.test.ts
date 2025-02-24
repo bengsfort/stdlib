@@ -3,6 +3,32 @@ import { describe, it, expect } from 'vitest';
 import { Vector3 } from '../vector3.js';
 
 describe('math/vector3', () => {
+  it('should init with either numbers or another vector', () => {
+    const numbers = new Vector3(5, 10, 1);
+    expect(numbers).toBeInstanceOf(Vector3);
+    expect(numbers.x).toEqual(5);
+    expect(numbers.y).toEqual(10);
+    expect(numbers.z).toEqual(1);
+
+    const vec3Like = new Vector3({ x: 5, y: 10, z: 1 });
+    expect(vec3Like).toBeInstanceOf(Vector3);
+    expect(vec3Like.x).toEqual(5);
+    expect(vec3Like.y).toEqual(10);
+    expect(vec3Like.z).toEqual(1);
+
+    const vec3 = new Vector3(new Vector3(5, 10, 1));
+    expect(vec3).toBeInstanceOf(Vector3);
+    expect(vec3.x).toEqual(5);
+    expect(vec3.y).toEqual(10);
+    expect(vec3.z).toEqual(1);
+
+    const defaultVals = new Vector3();
+    expect(defaultVals).toBeInstanceOf(Vector3);
+    expect(defaultVals.x).toEqual(0);
+    expect(defaultVals.y).toEqual(0);
+    expect(defaultVals.z).toEqual(0);
+  });
+
   it('should store 3d vectors', () => {
     const vec3 = new Vector3(5, 10, 1);
     expect(vec3).toBeInstanceOf(Vector3);
@@ -173,6 +199,13 @@ describe('math/vector3', () => {
 
       const v2 = new Vector3(10, 5, 5);
       expect(Vector3.Normalize(v2).getLength()).toBeCloseTo(1);
+    });
+
+    it('Should assert if a value is vector3-like', () => {
+      expect(Vector3.IsVec3Like(5)).toEqual(false);
+      expect(Vector3.IsVec3Like({ x: 5, y: 300 })).toEqual(false);
+      expect(Vector3.IsVec3Like({ x: 500, y: 300, z: 200 })).toEqual(true);
+      expect(Vector3.IsVec3Like(new Vector3(5, 5, 5))).toEqual(true);
     });
   });
 });

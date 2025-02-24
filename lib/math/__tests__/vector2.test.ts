@@ -4,6 +4,28 @@ import { describe, it, expect } from 'vitest';
 import { Vector2 } from '../vector2.js';
 
 describe('math/vector2', () => {
+  it('should init with either numbers or another vector', () => {
+    const numbers = new Vector2(5, 10);
+    expect(numbers).toBeInstanceOf(Vector2);
+    expect(numbers.x).toEqual(5);
+    expect(numbers.y).toEqual(10);
+
+    const vec2Like = new Vector2({ x: 5, y: 10 });
+    expect(vec2Like).toBeInstanceOf(Vector2);
+    expect(vec2Like.x).toEqual(5);
+    expect(vec2Like.y).toEqual(10);
+
+    const vec2 = new Vector2(new Vector2(5, 10));
+    expect(vec2).toBeInstanceOf(Vector2);
+    expect(vec2.x).toEqual(5);
+    expect(vec2.y).toEqual(10);
+
+    const defaultVals = new Vector2();
+    expect(defaultVals).toBeInstanceOf(Vector2);
+    expect(defaultVals.x).toEqual(0);
+    expect(defaultVals.y).toEqual(0);
+  });
+
   it('should store 2d vectors', () => {
     const vec2 = new Vector2(5, 10);
     expect(vec2).toBeInstanceOf(Vector2);
@@ -181,6 +203,13 @@ describe('math/vector2', () => {
       expect(Vector2.Normalize(v1).getLength()).toBeCloseTo(1);
       const v2 = new Vector2(10, 5);
       expect(Vector2.Normalize(v2).getLength()).toBeCloseTo(1);
+    });
+
+    it('Should assert if a value is vector2-like', () => {
+      expect(Vector2.IsVec2Like(5)).toEqual(false);
+      expect(Vector2.IsVec2Like({ x: 5 })).toEqual(false);
+      expect(Vector2.IsVec2Like({ x: 500, y: 300 })).toEqual(true);
+      expect(Vector2.IsVec2Like(new Vector2(5, 5))).toEqual(true);
     });
   });
 });

@@ -1,17 +1,26 @@
-import { clamp } from './utils.js';
+import { clamp, lerp } from './utils.js';
 
-export interface V2 {
+export interface IVec2 {
   x: number;
   y: number;
 }
 
-export class Vector2 implements V2 {
+type CtorArgs = [ref: IVec2] | [x?: number, y?: number];
+
+export class Vector2 implements IVec2 {
   public x = 0;
   public y = 0;
 
-  constructor(x = 0, y = 0) {
-    this.x = x;
-    this.y = y;
+  constructor(...args: CtorArgs) {
+    const [first, second] = args;
+
+    if (Vector2.IsVec2Like(first)) {
+      this.x = first.x;
+      this.y = first.y;
+    } else {
+      this.x = first ?? 0;
+      this.y = second ?? 0;
+    }
   }
 
   // Helpers
@@ -91,7 +100,7 @@ export class Vector2 implements V2 {
    * @param v2 Second Vector2.
    * @returns Whether the vectors are equal.
    */
-  public static Equals(v1: V2, v2: V2): boolean {
+  public static Equals(v1: IVec2, v2: IVec2): boolean {
     return v1.x === v2.x && v1.y === v2.y;
   }
 
@@ -102,8 +111,8 @@ export class Vector2 implements V2 {
    * @param t The amount to interpolate (0 being start, 1 being end, etc.)
    * @returns A new Vector2 with the result.
    */
-  public static Lerp(v1: V2, v2: V2, t: number): Vector2 {
-    return new Vector2(v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t);
+  public static Lerp(v1: IVec2, v2: IVec2, t: number): Vector2 {
+    return new Vector2(lerp(v1.x, v2.x, t), lerp(v1.y, v2.y, t));
   }
 
   /**
@@ -111,8 +120,22 @@ export class Vector2 implements V2 {
    * @param vector The vector to normalize.
    * @returns A new Vector2 of the normalized vector.
    */
-  public static Normalize(vector: V2): Vector2 {
+  public static Normalize(vector: IVec2): Vector2 {
     return new Vector2(vector.x, vector.y).normalize();
+  }
+
+  /**
+   * Asserts a given unknonwn value is Vector2-like.
+   * @param obj The value.
+   * @returns True if it is vec2-like.
+   */
+  public static IsVec2Like(obj: unknown): obj is IVec2 {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      Object.hasOwn(obj, 'x') &&
+      Object.hasOwn(obj, 'y')
+    );
   }
 
   /**
@@ -145,7 +168,7 @@ export class Vector2 implements V2 {
    * @param other The other vector.
    * @returns Itself.
    */
-  public add(other: V2): this {
+  public add(other: IVec2): this {
     this.x += other.x;
     this.y += other.y;
     return this;
@@ -156,7 +179,7 @@ export class Vector2 implements V2 {
    * @param other The other vector.
    * @returns Itself.
    */
-  public multiply(other: V2): this {
+  public multiply(other: IVec2): this {
     this.x *= other.x;
     this.y *= other.y;
     return this;
@@ -189,7 +212,7 @@ export class Vector2 implements V2 {
    * @param other The other vector.
    * @returns Itself.
    */
-  public divide(other: V2): this {
+  public divide(other: IVec2): this {
     this.x /= other.x;
     this.y /= other.y;
     return this;
@@ -221,9 +244,9 @@ export class Vector2 implements V2 {
    * @param t The amount to interpolate (0 being itself, 1 being target, etc.)
    * @returns Itself.
    */
-  public lerp(target: V2, t: number): this {
-    this.x += (target.x - this.x) * t;
-    this.y += (target.y - this.y) * t;
+  public lerp(target: IVec2, t: number): this {
+    this.x += lerp(this.x, target.x, t);
+    this.y += lerp(this.y, target.y, t);
     return this;
   }
 
@@ -268,7 +291,7 @@ export class Vector2 implements V2 {
    * @param val The vector to check equality.
    * @returns If the vectors are equal.
    */
-  public equals(val: V2): boolean {
+  public equals(val: IVec2): boolean {
     return val.x === this.x && val.y === this.y;
   }
 
@@ -276,7 +299,7 @@ export class Vector2 implements V2 {
    * Return a lightweight object literal with the x and y component.
    * @returns An object literal with the vector set to x, y.
    */
-  public toLiteral(): V2 {
+  public toLiteral(): IVec2 {
     return { x: this.x, y: this.y };
   }
 
