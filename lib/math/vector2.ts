@@ -50,7 +50,7 @@ export class Vector2 implements IVec2 {
    * @param v2 Second Vector2.
    * @returns A new vector of the sum of the given vectors.
    */
-  public static Add(v1: Vector2, v2: Vector2): Vector2 {
+  public static Add(v1: IVec2, v2: IVec2): Vector2 {
     return new Vector2(v1.x + v2.x, v1.y + v2.y);
   }
 
@@ -60,7 +60,7 @@ export class Vector2 implements IVec2 {
    * @param v2 Second Vector2.
    * @returns A new vector of the difference of the given vectors.
    */
-  public static Subtract(v1: Vector2, v2: Vector2): Vector2 {
+  public static Subtract(v1: IVec2, v2: IVec2): Vector2 {
     return new Vector2(v1.x - v2.x, v1.y - v2.y);
   }
 
@@ -70,7 +70,7 @@ export class Vector2 implements IVec2 {
    * @param v2 Second Vector2.
    * @returns A new vector with the result of the given vectors.
    */
-  public static Multiply(v1: Vector2, v2: Vector2): Vector2 {
+  public static Multiply(v1: IVec2, v2: IVec2): Vector2 {
     return new Vector2(v1.x * v2.x, v1.y * v2.y);
   }
 
@@ -80,8 +80,8 @@ export class Vector2 implements IVec2 {
    * @param val The value to multiply each component by.
    * @returns A new vector with the result.
    */
-  public static MultiplyScalar(v1: Vector2, val: number): Vector2 {
-    return v1.copy().multiplyScalar(val);
+  public static MultiplyScalar(v1: IVec2, val: number): Vector2 {
+    return new Vector2(v1).multiplyScalar(val);
   }
 
   /**
@@ -90,7 +90,7 @@ export class Vector2 implements IVec2 {
    * @param v2 Second Vector2.
    * @returns A new vector of the result of the given vectors.
    */
-  public static Divide(v1: Vector2, v2: Vector2): Vector2 {
+  public static Divide(v1: IVec2, v2: IVec2): Vector2 {
     return new Vector2(v1.x / v2.x, v1.y / v2.y);
   }
 

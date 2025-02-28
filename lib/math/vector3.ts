@@ -66,7 +66,7 @@ export class Vector3 implements IVec3 {
    * @param v2 Second Vector3.
    * @returns A new vector of the sum of the given vectors.
    */
-  public static Add(v1: Vector3, v2: Vector3): Vector3 {
+  public static Add(v1: IVec3, v2: IVec3): Vector3 {
     return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
   }
 
@@ -76,7 +76,7 @@ export class Vector3 implements IVec3 {
    * @param v2 Second Vector3.
    * @returns A new vector of the difference of the given vectors.
    */
-  public static Subtract(v1: Vector3, v2: Vector3): Vector3 {
+  public static Subtract(v1: IVec3, v2: IVec3): Vector3 {
     return new Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
   }
 
@@ -86,7 +86,7 @@ export class Vector3 implements IVec3 {
    * @param v2 Second Vector3.
    * @returns A new vector with the result of the given vectors.
    */
-  public static Multiply(v1: Vector3, v2: Vector3): Vector3 {
+  public static Multiply(v1: IVec3, v2: IVec3): Vector3 {
     return new Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
   }
 
@@ -96,8 +96,8 @@ export class Vector3 implements IVec3 {
    * @param val The value to multiply each component by.
    * @returns A new vector with the result.
    */
-  public static MultiplyScalar(v1: Vector3, val: number): Vector3 {
-    return v1.copy().multiplyScalar(val);
+  public static MultiplyScalar(v1: IVec3, val: number): Vector3 {
+    return new Vector3(v1).multiplyScalar(val);
   }
 
   /**
@@ -106,7 +106,7 @@ export class Vector3 implements IVec3 {
    * @param v2 Second Vector3.
    * @returns A new vector of the result of the given vectors.
    */
-  public static Divide(v1: Vector3, v2: Vector3): Vector3 {
+  public static Divide(v1: IVec3, v2: IVec3): Vector3 {
     return new Vector3(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
   }
 
