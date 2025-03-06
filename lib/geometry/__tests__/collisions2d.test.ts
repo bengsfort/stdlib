@@ -7,6 +7,7 @@ import {
   aabbIntersectsCircle2D,
   circleContainsPoint2D,
   circleIntersectsCircle2D,
+  closestPointOnAabb2D,
 } from '../collisions2d.js';
 import type { IAABB2D, ICircle } from '../primitives.js';
 
@@ -126,9 +127,30 @@ describe('geometry/collisions', () => {
         min: new Vector2(-5, -5),
         max: new Vector2(5, 5),
       };
+
+      const above = closestPointOnAabb2D(bounds, new Vector2(0, 10));
+      expect(above.x).toEqual(0);
+      expect(above.y).toEqual(5);
+
+      const left = closestPointOnAabb2D(bounds, new Vector2(-10, 0));
+      expect(left.x).toEqual(-5);
+      expect(left.y).toEqual(0);
+
+      const oblique = closestPointOnAabb2D(bounds, new Vector2(10, 10));
+      expect(oblique.x).toEqual(5);
+      expect(oblique.y).toEqual(5);
     });
 
-    it('should return the point if it is within the bounds', () => { });
+    it('should return the point if it is within the bounds', () => {
+      const bounds: IAABB2D = {
+        min: new Vector2(-5, -5),
+        max: new Vector2(5, 5),
+      };
+
+      const same = closestPointOnAabb2D(bounds, new Vector2(-2, 3));
+      expect(same.x).toEqual(-2);
+      expect(same.y).toEqual(3);
+    });
   });
 
   describe('aabbIntersectsCircle2D', () => {
@@ -247,5 +269,13 @@ describe('geometry/collisions', () => {
         }),
       ).toEqual(false);
     });
+  });
+
+  describe('closestPointOnCircle2D', () => {
+
+  });
+
+  describe('circleContainsPoint2D', () => {
+
   });
 });
