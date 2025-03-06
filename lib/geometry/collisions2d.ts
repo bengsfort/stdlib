@@ -22,20 +22,31 @@ export function closestPointOnAabb2D(a: IAABB2D, point: IVec2): IVec2 {
   return new Vector2(clamp(point.x, a.min.x, a.max.x), clamp(point.y, a.min.y, a.max.y));
 }
 
-export function aabbIntersectsCircle2D(a: IAABB2D, b: ICircle): boolean {
-  // @todo
-  return false;
-}
-
-export function closestPointOnCircle2D(a: ICircle, point: IVec2): boolean {
-  // @todo
-  return false;
-}
-
 export function circleContainsPoint2D(circle: ICircle, point: IVec2): boolean {
-  return false;
+  const diff = Vector2.Subtract(circle.position, point);
+  return diff.getMagnitude() < circle.radius * circle.radius;
+}
+
+export function closestPointOnCircle2D(circle: ICircle, point: IVec2): IVec2 {
+  const diff = Vector2.Subtract(point, circle.position);
+
+  // If the point is inside of the circle, just return it
+  if (diff.getMagnitude() < circle.radius * circle.radius) {
+    return point;
+  }
+
+  // Normalize the difference and transform it by the radius
+  diff.normalize().multiplyScalar(circle.radius);
+
+  // Finally move the result BACK to world space
+  return diff.add(circle.position);
 }
 
 export function circleIntersectsCircle2D(a: ICircle, b: ICircle): boolean {
+  return false;
+}
+
+export function aabbIntersectsCircle2D(a: IAABB2D, b: ICircle): boolean {
+  // @todo
   return false;
 }

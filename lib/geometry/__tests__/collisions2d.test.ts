@@ -8,6 +8,7 @@ import {
   circleContainsPoint2D,
   circleIntersectsCircle2D,
   closestPointOnAabb2D,
+  closestPointOnCircle2D,
 } from '../collisions2d.js';
 import type { IAABB2D, ICircle } from '../primitives.js';
 
@@ -272,10 +273,21 @@ describe('geometry/collisions', () => {
   });
 
   describe('closestPointOnCircle2D', () => {
+    const base: ICircle = {
+      position: new Vector2(0, 0),
+      radius: 5,
+    };
 
-  });
+    const up = closestPointOnCircle2D(base, new Vector2(0, 10));
+    expect(up.x).toEqual(0);
+    expect(up.y).toEqual(5);
 
-  describe('circleContainsPoint2D', () => {
+    const left = closestPointOnCircle2D(base, new Vector2(-7, 0));
+    expect(left.x).toEqual(-5);
+    expect(left.y).toEqual(0);
 
+    const inside = closestPointOnCircle2D(base, new Vector2(2, -2));
+    expect(inside.x).toEqual(2);
+    expect(inside.y).toEqual(-2);
   });
 });
