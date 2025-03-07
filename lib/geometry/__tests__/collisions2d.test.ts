@@ -206,7 +206,7 @@ describe('geometry/collisions', () => {
       // Clear cases
       expect(circleContainsPoint2D(circle, new Vector2(0, 0))).toEqual(true);
       expect(circleContainsPoint2D(circle, new Vector2(4, 2))).toEqual(true);
-      expect(circleContainsPoint2D(circle, new Vector2(-4, -4))).toEqual(true);
+      expect(circleContainsPoint2D(circle, new Vector2(-3, -3))).toEqual(true);
       expect(circleContainsPoint2D(circle, new Vector2(100, 100))).toEqual(false);
 
       // Since it is a circle, { radius, radius } should be false.
@@ -273,21 +273,23 @@ describe('geometry/collisions', () => {
   });
 
   describe('closestPointOnCircle2D', () => {
-    const base: ICircle = {
-      position: new Vector2(0, 0),
-      radius: 5,
-    };
+    it('should return the closest point on a circle2D given a point', () => {
+      const base: ICircle = {
+        position: new Vector2(0, 0),
+        radius: 5,
+      };
 
-    const up = closestPointOnCircle2D(base, new Vector2(0, 10));
-    expect(up.x).toEqual(0);
-    expect(up.y).toEqual(5);
+      const up = closestPointOnCircle2D(base, new Vector2(0, 10));
+      expect(up.x).toEqual(0);
+      expect(up.y).toEqual(5);
 
-    const left = closestPointOnCircle2D(base, new Vector2(-7, 0));
-    expect(left.x).toEqual(-5);
-    expect(left.y).toEqual(0);
+      const left = closestPointOnCircle2D(base, new Vector2(-7, 0));
+      expect(left.x).toEqual(-5);
+      expect(left.y).toEqual(0);
 
-    const inside = closestPointOnCircle2D(base, new Vector2(2, -2));
-    expect(inside.x).toEqual(2);
-    expect(inside.y).toEqual(-2);
+      const inside = closestPointOnCircle2D(base, new Vector2(2, -2));
+      expect(inside.x).toEqual(2);
+      expect(inside.y).toEqual(-2);
+    });
   });
 });

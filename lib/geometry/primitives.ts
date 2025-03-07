@@ -20,3 +20,13 @@ export interface ISphere {
   readonly position: IVec3;
   readonly radius: number;
 }
+
+export interface IRay2D {
+  readonly position: IVec2;
+  readonly direction: IVec2;
+}
+
+export interface IRay3D {
+  readonly position: IVec3;
+  readonly direction: IVec3;
+}
