@@ -101,6 +101,12 @@ describe('math/vector2', () => {
       expect(vec2.y).toEqual(2);
     });
 
+    it('.dot should provide the dot product', () => {
+      expect(new Vector2(-6, 10).dot(new Vector2(5, 12))).toBeCloseTo(90); // Arbitrary
+      expect(new Vector2(-12, 16).dot(new Vector2(12, 9))).toEqual(0); // Right angle
+      expect(new Vector2(1, 1).dot(new Vector2(1, 1))).toBeCloseTo(2); // Same vector
+    });
+
     it('.equals should check value equality with the given vector', () => {
       const original = new Vector2(300, 300);
       const notEqual = new Vector2(500, 420);
@@ -110,7 +116,7 @@ describe('math/vector2', () => {
       expect(original.equals(equal)).toEqual(true);
     });
 
-    it('should lerp to a new vector', () => {
+    it('.lerp should lerp to a new vector', () => {
       const original = new Vector2(0, 0);
       const target = new Vector2(100, 100);
 
@@ -190,7 +196,7 @@ describe('math/vector2', () => {
       expect(Vector2.Equals(v1, v3)).toEqual(true);
     });
 
-    it('Should provide a helper to lerp between two vectors', () => {
+    it('Vector2.Lerp should provide a helper to lerp between two vectors', () => {
       const v1 = new Vector2(5, 5);
       const v2 = new Vector2(10, 10);
       const result = Vector2.Lerp(v1, v2, 0.5);
@@ -198,14 +204,22 @@ describe('math/vector2', () => {
       expect(result.y).toEqual(7.5);
     });
 
-    it('Should normalize a vector', () => {
+    it('Vector2.Normalize should normalize a vector', () => {
       const v1 = new Vector2(5, 5);
       expect(Vector2.Normalize(v1).getLength()).toBeCloseTo(1);
       const v2 = new Vector2(10, 5);
       expect(Vector2.Normalize(v2).getLength()).toBeCloseTo(1);
     });
 
-    it('Should assert if a value is vector2-like', () => {
+    it('Vector2.Dot should provide the dot product', () => {
+      expect(Vector2.Dot(new Vector2(-6, 10), new Vector2(5, 12))).toBeCloseTo(90); // Arbitrary
+      expect(Vector2.Dot(new Vector2(-12, 16), new Vector2(12, 9))).toEqual(0); // Right angle
+      expect(Vector2.Dot(new Vector2(1, 0), new Vector2(2, 0))).toBeCloseTo(2); // Same direction
+      expect(Vector2.Dot(new Vector2(1, 1), new Vector2(1, 1))).toBeCloseTo(2); // Same vecs
+      expect(Vector2.Dot(new Vector2(1, 1), new Vector2(1, 0))).toBeCloseTo(1); // 45* angle
+    });
+
+    it('Vector2.IsVec2Like should assert if a value is vector2-like', () => {
       expect(Vector2.IsVec2Like(5)).toEqual(false);
       expect(Vector2.IsVec2Like({ x: 5 })).toEqual(false);
       expect(Vector2.IsVec2Like({ x: 500, y: 300 })).toEqual(true);

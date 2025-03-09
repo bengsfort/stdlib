@@ -141,6 +141,30 @@ export class Vector3 implements IVec3 {
   }
 
   /**
+   * Returns the dot product between two vectors.
+   * @param v1 The first vector.
+   * @param v2 The second vector.
+   * @returns The dot product.
+   */
+  public static Dot(v1: IVec3, v2: IVec3): number {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+  }
+
+  /**
+   * Returns the cross product between two vectors.
+   * @param v1 The first vector.
+   * @param v2 The second vector.
+   * @returns The dot product.
+   */
+  public static Cross(v1: IVec3, v2: IVec3): Vector3 {
+    return new Vector3(
+      v1.y * v2.z - v1.z * v2.y,
+      v1.z * v2.x - v1.x * v2.z,
+      v1.x * v2.y - v1.y * v2.x,
+    );
+  }
+
+  /**
    * Asserts a given unknonwn value is Vector3-like.
    * @param obj The value.
    * @returns True if it is vec3-like.
@@ -330,6 +354,24 @@ export class Vector3 implements IVec3 {
   public clampZ(min: number, max: number): this {
     this.z = clamp(this.z, min, max);
     return this;
+  }
+
+  /**
+   * Provides the dot product of this vector and another vector.
+   * @param other The other vector.
+   * @returns The dot product.
+   */
+  public dot(other: IVec3): number {
+    return Vector3.Dot(this, other);
+  }
+
+  /**
+   * Provides the cross product of this vector and another vector.
+   * @param other The other vector.
+   * @returns The cross product.
+   */
+  public cross(other: IVec3): Vector3 {
+    return Vector3.Cross(this, other);
   }
 
   /**

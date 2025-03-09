@@ -125,6 +125,16 @@ export class Vector2 implements IVec2 {
   }
 
   /**
+   * Gets the dot product of the given 2 vectors.
+   * @param v1 The first vector.
+   * @param v2 The second vector.
+   * @returns The dot product.
+   */
+  public static Dot(v1: IVec2, v2: IVec2): number {
+    return v1.x * v2.x + v1.y * v2.y;
+  }
+
+  /**
    * Asserts a given unknonwn value is Vector2-like.
    * @param obj The value.
    * @returns True if it is vec2-like.
@@ -284,6 +294,15 @@ export class Vector2 implements IVec2 {
   public clampY(min: number, max: number): this {
     this.y = clamp(this.y, min, max);
     return this;
+  }
+
+  /**
+   * Provides the dot product between this vector and another vector.
+   * @param other The other vector.
+   * @returns The dot product.
+   */
+  public dot(other: IVec2): number {
+    return Vector2.Dot(this, other);
   }
 
   /**

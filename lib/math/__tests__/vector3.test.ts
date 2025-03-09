@@ -113,6 +113,35 @@ describe('math/vector3', () => {
       expect(vec.z).toEqual(1);
     });
 
+    it('.dot should provide the dot product with another vector', () => {
+      expect(new Vector3(1, 2, 3).dot(new Vector3(4, 5, 6))).toEqual(32); // Arbitrary
+      expect(new Vector3(1, 1, 1).dot(new Vector3(1, 1, 1))).toEqual(3); // Identical
+      expect(new Vector3(1, 1, 0).dot(new Vector3(-1, 1, 0))).toEqual(0); // Perpendicular
+      expect(new Vector3(1, 1, 1).dot(new Vector3(1, 1, 0))).toEqual(2); // 45* angle
+    });
+
+    it('.cross should provide the cross product', () => {
+      const perpendicular = new Vector3(2, 0, 0).cross(new Vector3(0, 3, 0));
+      expect(perpendicular.x).toBeCloseTo(0);
+      expect(perpendicular.y).toBeCloseTo(0);
+      expect(perpendicular.z).toBeCloseTo(6);
+
+      const ortho = new Vector3(1, 1, 0).cross(new Vector3(-1, 1, 0));
+      expect(ortho.x).toBeCloseTo(0);
+      expect(ortho.y).toBeCloseTo(0);
+      expect(ortho.z).toBeCloseTo(2);
+
+      const same = new Vector3(2, 2, 2).cross(new Vector3(2, 2, 2));
+      expect(same.x).toBeCloseTo(0);
+      expect(same.y).toBeCloseTo(0);
+      expect(same.z).toBeCloseTo(0);
+
+      const parallel = new Vector3(1, 2, 3).cross(new Vector3(2, 4, 6));
+      expect(parallel.x).toBeCloseTo(0);
+      expect(parallel.y).toBeCloseTo(0);
+      expect(parallel.z).toBeCloseTo(0);
+    });
+
     it('.equals should check value equality with the given vector', () => {
       const original = new Vector3(100, 200, 300);
       const notEqual = new Vector3(500, 420, 300);
@@ -183,7 +212,7 @@ describe('math/vector3', () => {
       expect(Vector3.Equals(v1, v3)).toEqual(true);
     });
 
-    it('Should provide a helper to lerp between two vectors', () => {
+    it('Vector3.Lerp should provide a helper to lerp between two vectors', () => {
       const v1 = new Vector3(5, 5, 5);
       const v2 = new Vector3(10, 10, 10);
       const result = Vector3.Lerp(v1, v2, 0.5);
@@ -193,7 +222,36 @@ describe('math/vector3', () => {
       expect(result.z).toEqual(7.5);
     });
 
-    it('Should normalize a vector', () => {
+    it('Vector3.Dot should provide the dot product of two vectors', () => {
+      expect(Vector3.Dot(new Vector3(1, 2, 3), new Vector3(4, 5, 6))).toEqual(32); // Arbitrary
+      expect(Vector3.Dot(new Vector3(1, 1, 1), new Vector3(1, 1, 1))).toEqual(3); // Identical
+      expect(Vector3.Dot(new Vector3(1, 1, 0), new Vector3(-1, 1, 0))).toEqual(0); // Perpendicular
+      expect(Vector3.Dot(new Vector3(1, 1, 1), new Vector3(1, 1, 0))).toEqual(2); // 45* angle
+    });
+
+    it('Vector3.Cross should provide the cross product', () => {
+      const perpendicular = Vector3.Cross(new Vector3(2, 0, 0), new Vector3(0, 3, 0));
+      expect(perpendicular.x).toBeCloseTo(0);
+      expect(perpendicular.y).toBeCloseTo(0);
+      expect(perpendicular.z).toBeCloseTo(6);
+
+      const ortho = Vector3.Cross(new Vector3(1, 1, 0), new Vector3(-1, 1, 0));
+      expect(ortho.x).toBeCloseTo(0);
+      expect(ortho.y).toBeCloseTo(0);
+      expect(ortho.z).toBeCloseTo(2);
+
+      const same = Vector3.Cross(new Vector3(2, 2, 2), new Vector3(2, 2, 2));
+      expect(same.x).toBeCloseTo(0);
+      expect(same.y).toBeCloseTo(0);
+      expect(same.z).toBeCloseTo(0);
+
+      const parallel = Vector3.Cross(new Vector3(1, 2, 3), new Vector3(2, 4, 6));
+      expect(parallel.x).toBeCloseTo(0);
+      expect(parallel.y).toBeCloseTo(0);
+      expect(parallel.z).toBeCloseTo(0);
+    });
+
+    it('Vector3.Normalize should normalize a vector', () => {
       const v1 = new Vector3(5, 5, 5);
       expect(Vector3.Normalize(v1).getLength()).toBeCloseTo(1);
 
@@ -201,7 +259,7 @@ describe('math/vector3', () => {
       expect(Vector3.Normalize(v2).getLength()).toBeCloseTo(1);
     });
 
-    it('Should assert if a value is vector3-like', () => {
+    it('Vector3.IsVec3Like should assert if a value is vector3-like', () => {
       expect(Vector3.IsVec3Like(5)).toEqual(false);
       expect(Vector3.IsVec3Like({ x: 5, y: 300 })).toEqual(false);
       expect(Vector3.IsVec3Like({ x: 500, y: 300, z: 200 })).toEqual(true);
