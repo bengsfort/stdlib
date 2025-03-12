@@ -1,4 +1,4 @@
-import { clamp } from '../math/utils.js';
+import { clamp, EPSILON } from '../math/utils.js';
 import { IVec2, Vector2 } from '../math/vector2.js';
 
 import { IAABB2D, ICircle, IRay2D } from './primitives.js';
@@ -59,22 +59,47 @@ export function aabbIntersectsCircle2D(aabb: IAABB2D, circle: ICircle): boolean 
   return distanceSqrd <= radiusSqrd;
 }
 
-export function isPointOnRay2d(ray: IRay2D, point: IVec2): boolean {
-  // @todo
-  return false;
+export function isPointOnRay2D(ray: IRay2D, point: IVec2, epsilon = EPSILON): boolean {
+  if (Vector2.Equals(ray.position, point)) {
+    return true;
+  }
+
+  const diff = Vector2.Subtract(point, ray.position).normalize();
+  const dot = diff.dot(Vector2.Normalize(ray.direction));
+
+  return Math.abs(1.0 - dot) < epsilon;
 }
 
 export function closestPointOnRay2D(ray: IRay2D, point: IVec2): IVec2 {
-  // @todo
-  return point;
+  // Get the dot of the direction so we can project the point back onto it
+  const normalizedDir = Vector2.Normalize(ray.direction);
+  const directionDot = Vector2.Dot(normalizedDir, normalizedDir);
+
+  // If the direction vector is zero, the ray is just a point (should not happen)
+  if (directionDot === 0) {
+    return ray.position;
+  }
+
+  const distance = Vector2.Subtract(point, ray.position);
+  const projectionScalar = distance.dot(normalizedDir) / directionDot;
+
+  // If the scalar is negative, we are BEHIND the ray and thus the closest point
+  // is the origin of the ray, so just return that.
+  if (projectionScalar < 0) {
+    return ray.position;
+  }
+
+  // Scale the distance by the back to find the closest point
+  const projection = Vector2.MultiplyScalar(normalizedDir, projectionScalar);
+  return projection.add(ray.position);
 }
 
-export function rayIntersectsAabb2d(ray: IRay2D, aabb: IAABB2D): boolean {
+export function rayIntersectsAabb2D(ray: IRay2D, aabb: IAABB2D, collisionPoint = new Vector2()): boolean {
   // @todo
   return false;
 }
 
-export function rayIntersectsCircle2d(ray: IRay2D, aabb: IAABB2D): boolean {
+export function rayIntersectsCircle2D(ray: IRay2D, circle: ICircle, collisionPoint = new Vector2()): boolean {
   // @todo
   return false;
 }

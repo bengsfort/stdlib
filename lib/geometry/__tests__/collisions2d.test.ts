@@ -9,8 +9,12 @@ import {
   circleIntersectsCircle2D,
   closestPointOnAabb2D,
   closestPointOnCircle2D,
+  closestPointOnRay2D,
+  isPointOnRay2D,
+  rayIntersectsAabb2D,
+  rayIntersectsCircle2D,
 } from '../collisions2d.js';
-import type { IAABB2D, ICircle } from '../primitives.js';
+import type { IAABB2D, ICircle, IRay2D } from '../primitives.js';
 
 describe('geometry/collisions', () => {
   describe('aabbContainsPoint2D', () => {
@@ -290,6 +294,89 @@ describe('geometry/collisions', () => {
       const inside = closestPointOnCircle2D(base, new Vector2(2, -2));
       expect(inside.x).toEqual(2);
       expect(inside.y).toEqual(-2);
+    });
+  });
+
+  describe('isPointOnRay2D', () => {
+    it('should return whether a given point is on the given ray', () => {
+      const ray: IRay2D = {
+        position: new Vector2(0, 0),
+        direction: new Vector2(1, 1),
+      };
+
+      expect(isPointOnRay2D(ray, new Vector2(0, 0))).toEqual(true);
+      expect(isPointOnRay2D(ray, new Vector2(2, 2))).toEqual(true);
+      expect(isPointOnRay2D(ray, new Vector2(100, 100))).toEqual(true);
+      expect(isPointOnRay2D(ray, new Vector2(-2, 2))).toEqual(false);
+      expect(isPointOnRay2D(ray, new Vector2(-1, -1))).toEqual(false);
+      expect(isPointOnRay2D(ray, new Vector2(-3, 8))).toEqual(false);
+    });
+  });
+
+  describe('closestPointOnRay2D', () => {
+    it('should return the closest point on a given ray', () => {
+      const ray: IRay2D = {
+        position: new Vector2(1, 1),
+        direction: new Vector2(1, 0),
+      };
+
+      const onRay = closestPointOnRay2D(ray, new Vector2(3, 1));
+      expect(onRay.x).toEqual(3);
+      expect(onRay.y).toEqual(1);
+
+      const aboveRay = closestPointOnRay2D(ray, new Vector2(4, 3));
+      expect(aboveRay.x).toEqual(4);
+      expect(aboveRay.y).toEqual(1);
+
+      const belowRay = closestPointOnRay2D(ray, new Vector2(2, -3));
+      expect(belowRay.x).toEqual(2);
+      expect(belowRay.y).toEqual(1);
+
+      const behindRay = closestPointOnRay2D(ray, new Vector2(-2, 2));
+      expect(behindRay.x).toEqual(1);
+      expect(behindRay.y).toEqual(1);
+    });
+  });
+
+  describe('rayIntersectsAabb2D', () => {
+    it('should return if the ray is intersecting the aabb', () => {
+      const ray: IRay2D = {
+        position: new Vector2(2, 2),
+        direction: new Vector2(1, 0),
+      };
+
+      const collisionPoint = new Vector2();
+      const collides = rayIntersectsAabb2D(ray, {
+        min: new Vector2(4, 0),
+        max: new Vector2(8, 8),
+      }, collisionPoint);
+      expect(collides).toEqual(true);
+      expect(collisionPoint.x).toEqual(4);
+      expect(collisionPoint.y).toEqual(2);
+
+      const doesNotCollide = rayIntersectsAabb2D(ray, {
+        min: new Vector2(2.5, 2.5),
+        max: new Vector2(4.5, 4.5),
+      });
+      expect(doesNotCollide).toEqual(false);
+    });
+  });
+
+  describe('rayIntersectsCircle2D', () => {
+    it('should return if the ray is intersecting the given circle', () => {
+      const ray: IRay2D = {
+        position: new Vector2(2, 2),
+        direction: new Vector2(1, 0),
+      };
+
+      const collisionPoint = new Vector2();
+      const collides = rayIntersectsCircle2D(ray, {
+        position: new Vector2(6, 2),
+        radius: 2,
+      }, collisionPoint);
+      expect(collides).toEqual(true);
+      expect(collisionPoint.x).toEqual(4);
+      expect(collisionPoint.y).toEqual(2);
     });
   });
 });

@@ -1,3 +1,5 @@
+export const EPSILON = 0.000001;
+
 /**
  * Clamps a number between two boundaries.
  *
