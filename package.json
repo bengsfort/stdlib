@@ -16,20 +16,20 @@
   "type": "module",
   "exports": {
     "./errors/*": {
-      "default": "./dist/errors/*.js",
-      "types": "./dist/errors/*.d.ts"
+      "types": "./dist/errors/*.d.ts",
+      "default": "./dist/errors/*.js"
     },
     "./math/*": {
-      "default": "./dist/math/*.js",
-      "types": "./dist/math/*.d.ts"
+      "types": "./dist/math/*.d.ts",
+      "default": "./dist/math/*.js"
     },
     "./logging/*": {
-      "default": "./dist/logging/*.js",
-      "types": "./dist/logging/*.d.ts"
+      "types": "./dist/logging/*.d.ts",
+      "default": "./dist/logging/*.js"
     },
     "./logging/node/*": {
-      "default": "./dist/logging/node/*.js",
-      "types": "./dist/logging/node/*.d.ts"
+      "types": "./dist/logging/node/*.d.ts",
+      "default": "./dist/logging/node/*.js"
     }
   },
   "files": [
@@ -49,6 +49,7 @@
     "clean": "rimraf ./dist/* ./.tsbuildinfo/*",
     "test": "vitest",
     "lint": "eslint",
+    "sandbox": "vite ./sandbox",
     "ci:publish": "pnpm publish -r --access public",
     "prepublishOnly": "pnpm run clean && pnpm run build"
   },
@@ -59,6 +60,7 @@
     "eslint": "^9.20.1",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.3",
+    "vite": "^6.2.2",
     "vitest": "^3.0.6"
   }
 }
