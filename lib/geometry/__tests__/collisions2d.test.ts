@@ -346,10 +346,14 @@ describe('geometry/collisions', () => {
       };
 
       const collisionPoint = new Vector2();
-      const collides = rayIntersectsAabb2D(ray, {
-        min: new Vector2(4, 0),
-        max: new Vector2(8, 8),
-      }, collisionPoint);
+      const collides = rayIntersectsAabb2D(
+        ray,
+        {
+          min: new Vector2(4, 0),
+          max: new Vector2(8, 8),
+        },
+        collisionPoint,
+      );
       expect(collides).toEqual(true);
       expect(collisionPoint.x).toEqual(4);
       expect(collisionPoint.y).toEqual(2);
@@ -359,6 +363,18 @@ describe('geometry/collisions', () => {
         max: new Vector2(4.5, 4.5),
       });
       expect(doesNotCollide).toEqual(false);
+
+      const insidePoint = new Vector2();
+      const isInside = rayIntersectsAabb2D(
+        ray,
+        {
+          min: new Vector2(0, 0),
+          max: new Vector2(4, 4),
+        },
+        insidePoint,
+      );
+      expect(isInside).toEqual(true);
+      expect(insidePoint.equals(ray.position)).toEqual(true);
     });
   });
 
@@ -370,13 +386,35 @@ describe('geometry/collisions', () => {
       };
 
       const collisionPoint = new Vector2();
-      const collides = rayIntersectsCircle2D(ray, {
-        position: new Vector2(6, 2),
-        radius: 2,
-      }, collisionPoint);
+      const collides = rayIntersectsCircle2D(
+        ray,
+        {
+          position: new Vector2(6, 2),
+          radius: 2,
+        },
+        collisionPoint,
+      );
       expect(collides).toEqual(true);
       expect(collisionPoint.x).toEqual(4);
       expect(collisionPoint.y).toEqual(2);
+
+      const insidePoint = new Vector2();
+      const isInside = rayIntersectsCircle2D(
+        ray,
+        {
+          position: new Vector2(0, 0),
+          radius: 5,
+        },
+        insidePoint,
+      );
+      expect(isInside).toEqual(true);
+      expect(insidePoint.equals(ray.position)).toEqual(true);
+
+      const doesNotCollide = rayIntersectsCircle2D(ray, {
+        position: new Vector2(10, 10),
+        radius: 2,
+      });
+      expect(doesNotCollide).toEqual(false);
     });
   });
 });
