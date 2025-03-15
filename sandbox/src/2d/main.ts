@@ -9,12 +9,18 @@ function main(): void {
 
   const shapes: Drawable[] = [
     {
+      type: 'grid',
+      color: '#fff',
+      gridColor: '#383838',
+      range: new Vector2(50, 50),
+    },
+    {
       type: 'aabb',
       aabb: {
         min: new Vector2(-4, -4),
         max: new Vector2(4, 4),
       },
-      fill: 'transparent',
+      fill: 'blue',
     },
     {
       type: 'circle',
@@ -23,6 +29,7 @@ function main(): void {
         radius: 3,
       },
       fill: 'transparent',
+      stroke: '#f00',
     },
     {
       type: 'point',
@@ -39,7 +46,9 @@ function main(): void {
     },
   ];
 
-  const tick = (now: number): void => {
+  const tick = (_now: number): void => {
+    requestAnimationFrame(tick);
+
     // TODO: input
     // TODO: logic update
     renderer.render(shapes);

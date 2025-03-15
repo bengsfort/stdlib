@@ -1,4 +1,5 @@
 import { Drawable, renderDrawable } from './drawables/drawable';
+import { defaultRenderSettings, RenderSettings } from './render-settings';
 
 function resizeCanvas(canvas: HTMLCanvasElement, width: number, height: number): void {
   const { devicePixelRatio } = window;
@@ -35,13 +36,13 @@ export function bindCanvasToWindow(canvas: HTMLCanvasElement): UnbindCallback {
 }
 
 export class Renderer2D {
-  public clearColor = '#000000';
+  public readonly settings: RenderSettings;
 
   #_canvas: HTMLCanvasElement;
   #_ctx: CanvasRenderingContext2D;
   #_unbindCallback: UnbindCallback | null = null;
 
-  constructor() {
+  constructor(settings: RenderSettings = defaultRenderSettings()) {
     const canvas = createCanvas();
     const ctx = canvas.getContext('2d');
 
@@ -49,6 +50,7 @@ export class Renderer2D {
       throw new Error('Missing rendering context');
     }
 
+    this.settings = settings;
     this.#_canvas = canvas;
     this.#_ctx = ctx;
   }
@@ -80,15 +82,19 @@ export class Renderer2D {
     const { width, height } = this.#_canvas;
 
     this.#_ctx.clearRect(0, 0, width, height);
-    this.#_ctx.fillStyle = this.clearColor;
     this.#_ctx.save();
 
+    this.#_ctx.fillStyle = this.settings.clearColor;
     this.#_ctx.fillRect(0, 0, width, height);
+
     this.#_ctx.translate(width * 0.5, height * 0.5);
-    this.#_ctx.scale(10, -10);
+    this.#_ctx.scale(1, -1);
 
     for (const drawable of drawables) {
-      renderDrawable(this.#_ctx, drawable);
+      this.#_ctx.save();
+      this.#_ctx.beginPath();
+      renderDrawable(this.#_ctx, this.settings, drawable);
+      this.#_ctx.restore();
     }
 
     this.#_ctx.restore();

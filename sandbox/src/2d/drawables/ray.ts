@@ -1,37 +1,35 @@
 import { IRay2D } from '@stdlib/geometry/primitives';
 import { Vector2 } from '@stdlib/math/vector2';
 
+import { RenderSettings } from '../render-settings';
+
 export interface IDrawableRay {
   type: 'ray';
   ray: IRay2D;
   color: string;
 }
 
-const POINT_RADIUS = 2;
 const RAY_LENGTH = 9999;
 
-export function drawRay(ctx: CanvasRenderingContext2D, drawable: IDrawableRay): void {
+export function drawRay(
+  ctx: CanvasRenderingContext2D,
+  settings: RenderSettings,
+  drawable: IDrawableRay,
+): void {
   ctx.save();
 
+  const { pixelsPerUnit } = settings;
   const { position, direction } = drawable.ray;
+
+  const scaledPosition = Vector2.MultiplyScalar(position, pixelsPerUnit);
   const end = Vector2.Normalize(direction).multiplyScalar(RAY_LENGTH);
 
   ctx.fillStyle = drawable.color;
-  ctx.translate(position.x, position.y);
+  ctx.translate(scaledPosition.x, scaledPosition.y);
 
-  ctx.save();
-  ctx.roundRect(
-    -POINT_RADIUS,
-    -POINT_RADIUS,
-    POINT_RADIUS * 2,
-    POINT_RADIUS * 2,
-    POINT_RADIUS,
-  );
-  ctx.fill();
-  ctx.restore();
-
+  ctx.strokeStyle = drawable.color;
   ctx.beginPath();
-  ctx.moveTo(position.x, position.y);
+  ctx.moveTo(0, 0);
   ctx.lineTo(end.x, end.y);
   ctx.stroke();
 
