@@ -1,7 +1,7 @@
 import { IRay2D } from '@stdlib/geometry/primitives';
 import { Vector2 } from '@stdlib/math/vector2';
 
-import { RenderSettings } from '../render-settings';
+import { RenderSettings } from '../renderer/render-settings';
 
 export interface IDrawableRay {
   type: 'ray';

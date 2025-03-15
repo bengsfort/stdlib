@@ -1,7 +1,7 @@
 import { Vector2 } from '@stdlib/math/vector2.js';
 
 import { Drawable } from './drawables/drawable.js';
-import { Renderer2D } from './renderer.js';
+import { Renderer2D } from './renderer/renderer.js';
 
 function main(): void {
   const renderer = new Renderer2D();

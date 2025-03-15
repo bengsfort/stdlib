@@ -1,6 +1,6 @@
 import { ICircle } from '@stdlib/geometry/primitives';
 
-import { RenderSettings } from '../render-settings';
+import { RenderSettings } from '../renderer/render-settings';
 
 export interface IDrawableCircle {
   type: 'circle';

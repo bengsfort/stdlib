@@ -1,4 +1,5 @@
-import { Drawable, renderDrawable } from './drawables/drawable';
+import { Drawable, renderDrawable } from '../drawables/drawable';
+
 import { defaultRenderSettings, RenderSettings } from './render-settings';
 
 function resizeCanvas(canvas: HTMLCanvasElement, width: number, height: number): void {

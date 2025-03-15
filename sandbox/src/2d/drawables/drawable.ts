@@ -1,4 +1,4 @@
-import { RenderSettings } from '../render-settings.js';
+import { RenderSettings } from '../renderer/render-settings.js';
 
 import { drawAABB, IDrawableAABB } from './aabb.js';
 import { drawCircle, IDrawableCircle } from './circle.js';
