@@ -1,7 +1,8 @@
-import { IAABB2D } from "@stdlib/geometry/primitives";
-import { Vector2 } from "@stdlib/math/vector2";
+import { IAABB2D } from '@stdlib/geometry/primitives';
+import { Vector2 } from '@stdlib/math/vector2';
 
 export interface IDrawableAABB {
+  type: 'aabb';
   aabb: IAABB2D;
   stroke?: string;
   fill: string;
@@ -25,7 +26,6 @@ export function drawAABB(ctx: CanvasRenderingContext2D, drawable: IDrawableAABB)
 
   ctx.fill();
   ctx.stroke();
-
 
   ctx.restore();
 }

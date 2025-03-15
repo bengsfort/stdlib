@@ -1,3 +1,5 @@
+import { Drawable, renderDrawable } from './drawables/drawable';
+
 function resizeCanvas(canvas: HTMLCanvasElement, width: number, height: number): void {
   const { devicePixelRatio } = window;
 
@@ -74,7 +76,7 @@ export class Renderer2D {
     this.#_canvas.remove();
   }
 
-  public render(): void {
+  public render(drawables: Drawable[] = []): void {
     const { width, height } = this.#_canvas;
 
     this.#_ctx.clearRect(0, 0, width, height);
@@ -82,7 +84,12 @@ export class Renderer2D {
     this.#_ctx.save();
 
     this.#_ctx.fillRect(0, 0, width, height);
-    // TODO: Drawables
+    this.#_ctx.translate(width * 0.5, height * 0.5);
+    this.#_ctx.scale(10, -10);
+
+    for (const drawable of drawables) {
+      renderDrawable(this.#_ctx, drawable);
+    }
 
     this.#_ctx.restore();
   }

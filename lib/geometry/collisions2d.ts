@@ -1,8 +1,5 @@
-import { networkInterfaces } from 'os';
-
 import { clamp, EPSILON } from '../math/utils.js';
 import { IVec2, Vector2 } from '../math/vector2.js';
-import { Vector3 } from '../math/vector3.js';
 
 import { IAABB2D, ICircle, IRay2D } from './primitives.js';
 
