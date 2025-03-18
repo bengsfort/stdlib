@@ -19,6 +19,10 @@
       "types": "./dist/errors/*.d.ts",
       "default": "./dist/errors/*.js"
     },
+    "./events/*": {
+      "types": "./dist/events/*.d.ts",
+      "default": "./dist/events/*.js"
+    },
     "./math/*": {
       "types": "./dist/math/*.d.ts",
       "default": "./dist/math/*.js"

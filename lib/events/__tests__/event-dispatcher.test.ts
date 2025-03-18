@@ -36,7 +36,7 @@ describe('EventDispatcher', () => {
     dispatch.addListener('foo', () => {});
     expect(dispatch.getEvents()).toContain('foo');
 
-    const onGaz = () => {};
+    const onGaz = (): void => {};
     dispatch.addListener('foo', () => {});
     dispatch.addListener('gaz', onGaz);
     const withGaz = dispatch.getEvents();
@@ -99,5 +99,19 @@ describe('EventDispatcher', () => {
     expect(onFoo).toHaveBeenCalledExactlyOnceWith(52, true);
 
     expect(dispatch.getListenerCount()).toEqual(0);
+  });
+
+  it('should support removing a listener via the unsub callback', () => {
+    const dispatch = new EventDispatcher<TestEventMap>();
+    const onFoo = vi.fn();
+
+    const unsub = dispatch.addListener('foo', onFoo);
+    expect(dispatch.getListenerCount()).toEqual(1);
+    dispatch.trigger('foo', 52, true);
+
+    unsub();
+    expect(dispatch.getListenerCount()).toEqual(0);
+    dispatch.trigger('foo', 30, false);
+    expect(onFoo).toHaveBeenCalledExactlyOnceWith(52, true);
   });
 });
