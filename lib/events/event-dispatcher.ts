@@ -1,9 +1,9 @@
-export type EventMap = Record<string, unknown[]>;
+export type EventMap = object;
 export type EventType<Map extends EventMap> = keyof Map;
 export type EventPayload<
   Map extends EventMap,
   Key extends EventType<Map> = EventType<Map>,
-> = Map[Key];
+> = Map[Key] extends unknown[] ? Map[Key] : unknown[];
 export type EventListener<
   Map extends EventMap,
   Key extends EventType<Map> = EventType<Map>,
@@ -68,15 +68,45 @@ export class EventDispatcher<Map extends EventMap> {
     listener: EventListener<Map, Event>,
   ): void {
     const listeners = this.#_listeners[event];
-    if (listeners && listeners.delete(listener)) {
+    if (listeners?.delete(listener)) {
       this.#_listenerCount = Math.max(this.#_listenerCount - 1, 0);
     }
 
-    // TODO: Implement
+    const autoRemoveListeners = this.#_autoRemoveListeners[event];
+    autoRemoveListeners?.delete(listener);
+
+    this.#_removeEmptyEvent(event);
   }
 
   public removeAllListeners(): void {
-    // TODO: Implement
+    for (const event in this.#_listeners) {
+      this.#_listeners[event]?.clear();
+    }
+
+    for (const event in this.#_autoRemoveListeners) {
+      this.#_autoRemoveListeners[event]?.clear();
+    }
+
+    this.#_autoRemoveListeners = {};
+    this.#_listeners = {};
+
+    this.#_events.clear();
+    this.#_listenerCount = 0;
+  }
+
+  public trigger<Event extends EventType<Map> = EventType<Map>>(
+    event: Event,
+    ...payload: EventPayload<Map, Event>
+  ): void {
+    const listeners = this.#_listeners[event];
+
+    listeners?.forEach((listener) => {
+      void listener(...payload);
+
+      if (this.#_autoRemoveListeners[event]?.has(listener)) {
+        this.removeListener(event, listener);
+      }
+    });
   }
 
   public getListenerCount(): number {
@@ -85,5 +115,18 @@ export class EventDispatcher<Map extends EventMap> {
 
   public getEvents(): EventType<Map>[] {
     return [...this.#_events];
+  }
+
+  #_removeEmptyEvent(event: EventType<Map>): void {
+    if ((this.#_listeners[event]?.size ?? 0) < 1) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.#_listeners[event];
+      this.#_events.delete(event);
+    }
+
+    if ((this.#_autoRemoveListeners[event]?.size ?? 0) < 1) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.#_autoRemoveListeners[event];
+    }
   }
 }
