@@ -16,12 +16,13 @@ type DrawableMap = DrawableMapExtractor<
 
 export type DrawableType = keyof DrawableMap;
 export type Drawable<T extends DrawableType = DrawableType> = DrawableMap[T];
-
-export function renderDrawable(
+export type DrawableRenderFn<T extends DrawableType = DrawableType> = (
   ctx: CanvasRenderingContext2D,
   settings: RenderSettings,
-  drawable: Drawable,
-): void {
+  drawable: Drawable<T>,
+) => void;
+
+export const renderDrawable: DrawableRenderFn = (ctx, settings, drawable) => {
   switch (drawable.drawType) {
     case 'aabb':
       drawAABB(ctx, settings, drawable);
@@ -43,4 +44,4 @@ export function renderDrawable(
       drawGrid(ctx, settings, drawable);
       return;
   }
-}
+};
