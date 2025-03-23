@@ -4,7 +4,7 @@ import { Vector2 } from '@stdlib/math/vector2';
 import { RenderSettings } from '../renderer/render-settings';
 
 export interface IDrawableRay {
-  type: 'ray';
+  drawType: 'ray';
   ray: IRay2D;
   color: string;
 }

@@ -3,7 +3,7 @@ import { ICircle } from '@stdlib/geometry/primitives';
 import { RenderSettings } from '../renderer/render-settings';
 
 export interface IDrawableCircle {
-  type: 'circle';
+  drawType: 'circle';
   circle: ICircle;
   stroke?: string;
   fill: string;

@@ -3,7 +3,7 @@ import { Vector2 } from '@stdlib/math/vector2';
 import { RenderSettings } from '../renderer/render-settings';
 
 export interface IDrawableGrid {
-  type: 'grid';
+  drawType: 'grid';
   color: string;
   gridColor: string;
   range: Vector2;

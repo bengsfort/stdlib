@@ -3,7 +3,7 @@ import { Vector2 } from '@stdlib/math/vector2';
 import { RenderSettings } from '../renderer/render-settings';
 
 export interface IDrawablePoint {
-  type: 'point';
+  drawType: 'point';
   position: Vector2;
   color: string;
 }

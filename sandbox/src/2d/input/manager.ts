@@ -67,6 +67,7 @@ export class InputManager<Actions extends ActionMap> {
   #_boolActions = new Map<InputAction<Actions>, boolean>();
   #_rangeActions = new Map<InputAction<Actions>, number>();
   #_vecRangeActions = new Map<InputAction<Actions>, Vector2>();
+  #_mousePos = new Vector2();
 
   public clearActions(): void {
     this.#_actions = undefined;
@@ -198,7 +199,14 @@ export class InputManager<Actions extends ActionMap> {
         vector.y += yModifier;
         this.#_vecRangeActions.set(
           actionName,
-          vector.clamp(action.range.min, action.range.max).normalize(),
+          vector
+            .clamp(
+              action.range.min.x,
+              action.range.min.y,
+              action.range.max.x,
+              action.range.max.y,
+            )
+            .normalize(),
         );
         break;
 
@@ -241,7 +249,14 @@ export class InputManager<Actions extends ActionMap> {
         vector.y += yModifier;
         this.#_vecRangeActions.set(
           actionName,
-          vector.clamp(action.range.min, action.range.max).normalize(),
+          vector
+            .clamp(
+              action.range.min.x,
+              action.range.min.y,
+              action.range.max.x,
+              action.range.max.y,
+            )
+            .normalize(),
         );
         break;
 

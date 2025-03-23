@@ -6,8 +6,8 @@ import { drawGrid, IDrawableGrid } from './grid.js';
 import { drawPoint, IDrawablePoint } from './point.js';
 import { drawRay, IDrawableRay } from './ray.js';
 
-type DrawableMapExtractor<Type extends { type: string }> = {
-  [T in Type as T['type']]: T;
+type DrawableMapExtractor<Type extends { drawType: string }> = {
+  [T in Type as T['drawType']]: T;
 };
 
 type DrawableMap = DrawableMapExtractor<
@@ -22,7 +22,7 @@ export function renderDrawable(
   settings: RenderSettings,
   drawable: Drawable,
 ): void {
-  switch (drawable.type) {
+  switch (drawable.drawType) {
     case 'aabb':
       drawAABB(ctx, settings, drawable);
       return;
