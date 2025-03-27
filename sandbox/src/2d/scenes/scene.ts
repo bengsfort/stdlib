@@ -4,6 +4,7 @@ import { SandboxContext } from '../context';
 
 export interface SceneObject {
   position: Vector2;
+  destroy(): void;
 }
 
 export interface Scene {

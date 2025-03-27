@@ -1,11 +1,11 @@
-import { Renderer2D } from './renderer/renderer.js';
+import { CompositeRenderer2D } from './renderer/compositor.js';
 import { Scene } from './scenes/scene.js';
 import { createScene } from './scenes/shapes.js';
 
 function main(): void {
   let frameRef = 0;
 
-  const renderer = new Renderer2D();
+  const renderer = new CompositeRenderer2D();
   renderer.attach();
 
   const activeScene: Scene = createScene({

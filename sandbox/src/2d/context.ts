@@ -1,5 +1,5 @@
-import { Renderer2D } from './renderer/renderer';
+import { CompositeRenderer2D } from './renderer/compositor.js';
 
 export interface SandboxContext {
-  renderer: Renderer2D;
+  renderer: CompositeRenderer2D;
 }
