@@ -227,6 +227,9 @@ class Compositor2D {
 
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
+    context.fillStyle = 'green';
+    context.fillRect(-8, -8, 16, 16);
+
     // TODO: Sort by z-index
     const buffers = [...this.#_drawBuffers.entries()];
 
@@ -336,6 +339,9 @@ export class CompositeRenderer2D {
 
     this.#_ctx.fillStyle = this.settings.clearColor;
     this.#_ctx.fillRect(0, 0, width, height);
+
+    this.#_ctx.fillStyle = 'red';
+    this.#_ctx.fillRect(width * 0.5 - 16, height * 0.5 - 16, 32, 32);
 
     this.#_ctx.translate(width * 0.5, height * 0.5);
     this.#_ctx.scale(1, -1);
