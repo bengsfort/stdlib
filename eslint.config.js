@@ -6,7 +6,7 @@ export default [
     ignores: ['dist/'],
   },
   {
-    files: ['./lib/**/*.ts'],
+    files: ['./lib/**/*.ts', './sandbox/src/**/*.ts'],
   },
   ...bengsfort.configs.strictTypeChecked(import.meta.dirname),
 ];
