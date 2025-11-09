@@ -1,6 +1,11 @@
+import { makeLogger } from '@stdlib/logging/logger';
+import { Vector2 } from '@stdlib/math/vector2';
+
 import { Scene } from '../scenes/scene';
 
 import { defaultRenderSettings, RenderSettings } from './render-settings';
+
+const Log = makeLogger('renderer2d');
 
 function resizeCanvas(canvas: HTMLCanvasElement, width: number, height: number): void {
   const { devicePixelRatio } = window;
@@ -62,7 +67,7 @@ export class Renderer2D {
 
   public attach(): void {
     if (this.#_unbindCallback !== null) {
-      console.warn('Attempting to attach already attached renderer');
+      Log.warn('Attempting to attach already attached renderer');
       return;
     }
 
@@ -74,7 +79,7 @@ export class Renderer2D {
 
   public detach(): void {
     if (this.#_unbindCallback === null) {
-      console.warn('Attempting to detach non-attached renderer');
+      Log.warn('Attempting to detach non-attached renderer');
       return;
     }
 
@@ -108,5 +113,12 @@ export class Renderer2D {
       this.#_ctx.restore();
     }
     this.#_ctx.restore();
+  }
+
+  public getScreenToWorldSpace(screenPos: Vector2): Vector2 {
+    const { width, height } = this.#_canvas;
+    // const { pixelsPerUnit } = this.settings;
+
+    return new Vector2(width * 0.5 + screenPos.x, height * 0.5 + screenPos.y);
   }
 }

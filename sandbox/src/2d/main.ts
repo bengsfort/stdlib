@@ -1,9 +1,11 @@
 import { makeLogger } from '@stdlib/logging/logger.js';
 
+import { SandboxContext } from './context.js';
 import { InputManager } from './input/manager.js';
 import { MouseInput } from './input/mouse.js';
 import { Renderer2D } from './renderer/renderer.js';
 import { Scene } from './scenes/scene.js';
+import { ShapeCollisionsScene } from './scenes/shape-collisions.js';
 import { createScene } from './scenes/shapes.js';
 
 import { RepeatingArray } from '@/utils/fixed-array.js';
@@ -53,9 +55,9 @@ function drawFps(last100: RepeatingArray<Timing>, canvas: HTMLCanvasElement): vo
   {
     const x = 8;
     const y = 0;
-
     ctx.font = '14px monospace';
 
+    // Measure the text strings so can figure out positioning.
     const fpsStr = `avg fps ${fps.toFixed(0)} (${avgFrame.toFixed(2)}ms / ${avgUpdate.toFixed(2)}ms update / ${avgDraw.toFixed(2)}ms draw)`;
     const maxStr = `max fps ${frameMax.toFixed(2)}ms / max update ${updateMax.toFixed(2)}ms / max draw ${drawMax.toFixed(2)}ms`;
 
@@ -65,6 +67,7 @@ function drawFps(last100: RepeatingArray<Timing>, canvas: HTMLCanvasElement): vo
     const fpsHeight = fpsSize.fontBoundingBoxAscent + fpsSize.fontBoundingBoxDescent;
     const maxHeight = maxSize.fontBoundingBoxAscent + maxSize.fontBoundingBoxDescent;
 
+    // Draw the strings in a nice lil box
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = '#000';
     ctx.fillRect(x, y, Math.max(fpsSize.width, maxSize.width), fpsHeight + maxHeight);
@@ -89,11 +92,18 @@ function main(): void {
   const input = new InputManager();
   const mouse = new MouseInput();
   const renderer = new Renderer2D();
-  const activeScene: Scene = createScene({
+  const context: SandboxContext = {
     renderer,
     mouse,
     input,
-  });
+  };
+
+  // const activeScene: Scene = createScene({
+  //   renderer,
+  //   mouse,
+  //   input,
+  // });
+  const activeScene = ShapeCollisionsScene.Create(context);
 
   const tick = (now: number): void => {
     frameRef = requestAnimationFrame(tick);
