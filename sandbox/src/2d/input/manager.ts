@@ -60,14 +60,13 @@ class ActionTypeMismatchError extends Error {
   }
 }
 
-export class InputManager<Actions extends ActionMap> {
+export class InputManager<Actions extends ActionMap = ActionMap> {
   #_actions?: Actions;
   #_bindingsMap = new Map<string, InputAction<Actions>>();
   #_codeMap = new Map<string, boolean>();
   #_boolActions = new Map<InputAction<Actions>, boolean>();
   #_rangeActions = new Map<InputAction<Actions>, number>();
   #_vecRangeActions = new Map<InputAction<Actions>, Vector2>();
-  #_mousePos = new Vector2();
 
   public clearActions(): void {
     this.#_actions = undefined;
@@ -76,11 +75,15 @@ export class InputManager<Actions extends ActionMap> {
     this.#_boolActions.clear();
     this.#_rangeActions.clear();
     this.#_vecRangeActions.clear();
+
+    document.removeEventListener('keydown', this.#handleKeyDown);
+    document.removeEventListener('keyup', this.#handleKeyUp);
   }
 
-  public registerActions(actions: Actions): void {
+  public registerActions<T extends ActionMap>(actions: T): InputManager<T> {
     this.clearActions();
 
+    // @ts-expect-error i dont jaksa to type this atm
     this.#_actions = actions;
 
     // Init code lookup maps
@@ -122,6 +125,8 @@ export class InputManager<Actions extends ActionMap> {
 
     document.addEventListener('keydown', this.#handleKeyDown);
     document.addEventListener('keyup', this.#handleKeyUp);
+
+    return this as unknown as InputManager<T>;
   }
 
   public getBoolAction(action: InputAction<Actions>): boolean {

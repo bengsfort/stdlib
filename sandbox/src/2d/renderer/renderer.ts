@@ -1,4 +1,4 @@
-import { Drawable, renderDrawable } from '../drawables/drawable';
+import { Scene } from '../scenes/scene';
 
 import { defaultRenderSettings, RenderSettings } from './render-settings';
 
@@ -56,6 +56,10 @@ export class Renderer2D {
     this.#_ctx = ctx;
   }
 
+  public getCanvas(): HTMLCanvasElement {
+    return this.#_canvas;
+  }
+
   public attach(): void {
     if (this.#_unbindCallback !== null) {
       console.warn('Attempting to attach already attached renderer');
@@ -79,25 +83,30 @@ export class Renderer2D {
     this.#_canvas.remove();
   }
 
-  public render(drawables: Drawable[] = []): void {
+  public render(scene: Scene): void {
     const { width, height } = this.#_canvas;
 
-    this.#_ctx.clearRect(0, 0, width, height);
-    this.#_ctx.save();
-
+    // Clear the canvas.
     this.#_ctx.fillStyle = this.settings.clearColor;
+    this.#_ctx.clearRect(0, 0, width, height);
     this.#_ctx.fillRect(0, 0, width, height);
+    this.#_ctx.save();
+    {
+      // Set the base transformation matrices so scene objects are rendered
+      // relative to the 'world grid'.
+      this.#_ctx.translate(
+        width * 0.5 + scene.cameraOrigin.x * this.settings.pixelsPerUnit,
+        height * 0.5 + scene.cameraOrigin.y * this.settings.pixelsPerUnit,
+      );
+      this.#_ctx.scale(1, -1);
 
-    this.#_ctx.translate(width * 0.5, height * 0.5);
-    this.#_ctx.scale(1, -1);
-
-    for (const drawable of drawables) {
+      // Render the scene.
       this.#_ctx.save();
-      this.#_ctx.beginPath();
-      renderDrawable(this.#_ctx, this.settings, drawable);
+      {
+        scene.render(this.#_ctx, this.settings);
+      }
       this.#_ctx.restore();
     }
-
     this.#_ctx.restore();
   }
 }

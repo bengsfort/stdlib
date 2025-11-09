@@ -3,17 +3,22 @@ import { Vector2 } from '@stdlib/math/vector2';
 
 import { drawAABB, IDrawableAABB } from '../drawables/aabb';
 import { drawCircle, IDrawableCircle } from '../drawables/circle';
-import {
-  Drawable,
-  DrawableRenderFn,
-  DrawableType,
-  renderDrawable,
-} from '../drawables/drawable';
+import { Drawable, DrawableRenderFn } from '../drawables/drawable';
 import { drawGrid, IDrawableGrid } from '../drawables/grid';
 import { drawPoint, IDrawablePoint } from '../drawables/point';
 import { drawRay, IDrawableRay } from '../drawables/ray';
 
 import { defaultRenderSettings, RenderSettings } from './render-settings';
+
+// This compositor is not fully working, but it was an interesting thing to work
+// on so it is here as-is for future improving.
+//
+// It essentially does not create the buffers correctly -- the ImageData creation
+// fails due to invalid sizing.
+//
+// Additionally, the flow is very awkward. It should likely be changed to where
+// you request to create a specific drawing/shape INSTANCE -- and then you get
+// the RID from that instead of doing the current rid -> draw call approach.
 
 function resizeCanvas(canvas: HTMLCanvasElement, width: number, height: number): void {
   const { devicePixelRatio } = window;
@@ -225,11 +230,6 @@ class Compositor2D {
   public composite(context: CanvasRenderingContext2D, settings: RenderSettings): void {
     this.#_preRenderDirtyCommands(settings);
 
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-
-    context.fillStyle = 'green';
-    context.fillRect(-8, -8, 16, 16);
-
     // TODO: Sort by z-index
     const buffers = [...this.#_drawBuffers.entries()];
 
@@ -339,9 +339,6 @@ export class CompositeRenderer2D {
 
     this.#_ctx.fillStyle = this.settings.clearColor;
     this.#_ctx.fillRect(0, 0, width, height);
-
-    this.#_ctx.fillStyle = 'red';
-    this.#_ctx.fillRect(width * 0.5 - 16, height * 0.5 - 16, 32, 32);
 
     this.#_ctx.translate(width * 0.5, height * 0.5);
     this.#_ctx.scale(1, -1);

@@ -1,80 +1,93 @@
+import type { IAABB2D, ICircle, IRay2D } from '@stdlib/geometry/primitives';
 import { transformRange } from '@stdlib/math/utils';
 import { Vector2 } from '@stdlib/math/vector2';
 
 import { SandboxContext } from '../context';
-import { IDrawableAABB } from '../drawables/aabb';
-import { Drawable } from '../drawables/drawable';
+import { drawAABB } from '../drawables/aabb';
+import { drawCircle } from '../drawables/circle';
+import { drawGrid } from '../drawables/grid';
+import { drawPoint } from '../drawables/point';
+import { drawRay } from '../drawables/ray';
+import type { RenderSettings } from '../renderer/render-settings';
 
-import { Scene, SceneFactory } from './scene';
+import type { Scene, SceneFactory } from './scene';
 
 const MODIFIER = 0.0016;
 
 class ShapeScene implements Scene {
-  #_ctx: SandboxContext;
-  #_drawables: Drawable[];
-  #_boxIndex = 1;
+  public readonly cameraOrigin: Vector2;
 
-  constructor(context: SandboxContext) {
-    this.#_ctx = context;
-    this.#_drawables = [
-      {
-        drawType: 'grid',
-        range: new Vector2(20, 20),
-        color: '#989898',
-        gridColor: '#383838',
-      },
-      {
-        drawType: 'aabb',
-        fill: 'transparent',
-        stroke: 'red',
-        aabb: {
-          min: new Vector2(-4, -4),
-          max: new Vector2(4, 4),
-        },
-      },
-      {
-        drawType: 'circle',
-        fill: 'transparent',
-        stroke: 'red',
-        circle: {
-          radius: 2,
-          position: new Vector2(6, 0),
-        },
-      },
-      {
-        drawType: 'point',
-        position: new Vector2(6, 6),
-        color: 'red',
-      },
-      {
-        drawType: 'ray',
-        ray: {
-          position: new Vector2(-6, -6),
-          direction: new Vector2(1, 1),
-        },
-        color: 'red',
-      },
-    ];
+  #_aabb: IAABB2D;
+  #_circle: ICircle;
+  #_point: Vector2;
+  #_ray: IRay2D;
+
+  constructor() {
+    this.cameraOrigin = new Vector2(0, 0);
+
+    this.#_aabb = {
+      min: new Vector2(-4, -4),
+      max: new Vector2(4, 4),
+    };
+
+    this.#_circle = {
+      radius: 2,
+      position: new Vector2(6, 0),
+    };
+
+    this.#_point = new Vector2(6, 6);
+    this.#_ray = {
+      position: new Vector2(-6, -6),
+      direction: new Vector2(1, 1),
+    };
   }
 
   public tick(now: number): void {
-    const box = this.#_drawables[this.#_boxIndex] as IDrawableAABB;
+    const box = this.#_aabb;
     const sin = Math.sin(now * MODIFIER);
 
-    box.aabb.min.x = transformRange(sin, -1, 1, -4, -2);
-    box.aabb.min.y = transformRange(sin, -1, 1, -4, -2);
-    box.aabb.max.x = transformRange(-sin, -1, 1, 2, 4);
-    box.aabb.max.y = transformRange(-sin, -1, 1, 2, 4);
+    box.min.x = transformRange(sin, -1, 1, -4, -2);
+    box.min.y = transformRange(sin, -1, 1, -4, -2);
+    box.max.x = transformRange(-sin, -1, 1, 2, 4);
+    box.max.y = transformRange(-sin, -1, 1, 2, 4);
+  }
 
-    this.#_ctx.renderer.render(this.#_drawables);
+  public render(context: CanvasRenderingContext2D, settings: RenderSettings): void {
+    drawGrid(context, settings, {
+      drawType: 'grid',
+      range: new Vector2(20, 20),
+      color: '#989898',
+      gridColor: '#383838',
+    });
+    drawAABB(context, settings, {
+      drawType: 'aabb',
+      fill: 'transparent',
+      stroke: 'red',
+      aabb: this.#_aabb,
+    });
+    drawCircle(context, settings, {
+      drawType: 'circle',
+      fill: 'transparent',
+      stroke: 'red',
+      circle: this.#_circle,
+    });
+    drawPoint(context, settings, {
+      drawType: 'point',
+      position: this.#_point,
+      color: 'red',
+    });
+    drawRay(context, settings, {
+      drawType: 'ray',
+      ray: this.#_ray,
+      color: 'red',
+    });
   }
 
   public cleanup(): void {
-    // @todo
-    this.#_drawables = [];
+    // No need
   }
 }
 
-export const createScene: SceneFactory = (context: SandboxContext): Scene => {
-  return new ShapeScene(context);
+export const createScene: SceneFactory = (_context: SandboxContext): Scene => {
+  return new ShapeScene();
 };
