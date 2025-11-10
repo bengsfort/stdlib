@@ -1,3 +1,7 @@
+import {
+  aabbIntersectsCircle2D,
+  circleIntersectsCircle2D,
+} from '@stdlib/geometry/collisions2d.js';
 import { IAABB2D, ICircle } from '@stdlib/geometry/primitives.js';
 import { transformRange } from '@stdlib/math/utils.js';
 import { Vector2 } from '@stdlib/math/vector2.js';
@@ -13,7 +17,7 @@ import { Renderer2D } from '../renderer/renderer.js';
 import { Scene } from './scene.js';
 
 const RECT_COUNT = 5;
-const CIRCLE_COUNT = 3;
+const CIRCLE_COUNT = 5;
 const SHAPE_MIN_SIZE = 0.5;
 const SHAPE_MAX_SIZE = 3;
 
@@ -96,8 +100,8 @@ export class ShapeCollisionsScene implements Scene {
       const xSeed = Math.random();
       const ySeed = Math.random();
       const pos = new Vector2(
-        transformRange(xSeed, 0, 1, -halfMaxX, halfMaxX),
-        transformRange(ySeed, 0, 1, -halfMaxY, halfMaxY),
+        transformRange(xSeed, 0, 1, -halfMaxX + 20, halfMaxX - 20),
+        transformRange(ySeed, 0, 1, -halfMaxY + 20, halfMaxY - 20),
       );
       this.#_rects[i] = getRandomRect(pos);
     }
@@ -116,16 +120,28 @@ export class ShapeCollisionsScene implements Scene {
   }
 
   public tick(_now: number): void {
-    // TODO: This needs to be translated to world space
-    const { pixelsPerUnit } = this.#_renderer.settings;
     const { mousePosition } = this.#_mouseInput;
-    const worldPos = this.#_renderer.getScreenToWorldSpace(
-      mousePosition.copy().divideScalar(pixelsPerUnit),
-    );
+    const worldPos = this.#_renderer.getScreenToWorldSpace(this, mousePosition);
+
     this.#_pointer.position.x = worldPos.x;
     this.#_pointer.position.y = worldPos.y;
 
-    // TODO: Check collision
+    let hadIntersect = false;
+
+    for (let i = 0; i < this.#_rects.length; i++) {
+      this.#_rectsState[i] = aabbIntersectsCircle2D(this.#_rects[i], this.#_pointer);
+      if (this.#_rectsState[i]) hadIntersect = true;
+    }
+
+    for (let i = 0; i < this.#_circles.length; i++) {
+      this.#_circlesState[i] = circleIntersectsCircle2D(
+        this.#_circles[i],
+        this.#_pointer,
+      );
+      if (this.#_circlesState[i]) hadIntersect = true;
+    }
+
+    this.#_collision = hadIntersect;
   }
 
   public render(context: CanvasRenderingContext2D, settings: RenderSettings): void {

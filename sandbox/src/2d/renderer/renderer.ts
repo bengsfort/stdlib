@@ -1,4 +1,5 @@
 import { makeLogger } from '@stdlib/logging/logger';
+import { transformRange } from '@stdlib/math/utils';
 import { Vector2 } from '@stdlib/math/vector2';
 
 import { Scene } from '../scenes/scene';
@@ -115,10 +116,21 @@ export class Renderer2D {
     this.#_ctx.restore();
   }
 
-  public getScreenToWorldSpace(screenPos: Vector2): Vector2 {
+  public getScreenToWorldSpace(scene: Scene, screenPos: Vector2): Vector2 {
     const { width, height } = this.#_canvas;
-    // const { pixelsPerUnit } = this.settings;
+    const { pixelsPerUnit } = this.settings;
 
-    return new Vector2(width * 0.5 + screenPos.x, height * 0.5 + screenPos.y);
+    const maxWorldUnitsX = width / pixelsPerUnit;
+    const maxWorldUnitsY = height / pixelsPerUnit;
+
+    const minScreenX = scene.cameraOrigin.x - maxWorldUnitsX * 0.5;
+    const minScreenY = scene.cameraOrigin.y - maxWorldUnitsY * 0.5;
+    const maxScreenX = scene.cameraOrigin.x + maxWorldUnitsX * 0.5;
+    const maxScreenY = scene.cameraOrigin.y + maxWorldUnitsY * 0.5;
+
+    const x = transformRange(screenPos.x, 0, width, minScreenX, maxScreenX);
+    const y = transformRange(screenPos.y, 0, height, minScreenY, maxScreenY);
+
+    return new Vector2(x, -y);
   }
 }

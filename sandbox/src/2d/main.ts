@@ -4,9 +4,7 @@ import { SandboxContext } from './context.js';
 import { InputManager } from './input/manager.js';
 import { MouseInput } from './input/mouse.js';
 import { Renderer2D } from './renderer/renderer.js';
-import { Scene } from './scenes/scene.js';
 import { ShapeCollisionsScene } from './scenes/shape-collisions.js';
-import { createScene } from './scenes/shapes.js';
 
 import { RepeatingArray } from '@/utils/fixed-array.js';
 

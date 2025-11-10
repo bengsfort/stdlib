@@ -25,18 +25,21 @@ export function drawAABB(
   );
 
   ctx.save();
-  ctx.fillStyle = drawable.fill;
-  ctx.strokeStyle = drawable.stroke ?? 'transparent';
+  {
+    ctx.fillStyle = drawable.fill;
+    ctx.strokeStyle = drawable.stroke ?? 'transparent';
 
-  ctx.translate(position.x * pixelsPerUnit, position.y * pixelsPerUnit);
-  ctx.rect(
-    -halfSize.x * pixelsPerUnit,
-    -halfSize.y * pixelsPerUnit,
-    size.x * pixelsPerUnit,
-    size.y * pixelsPerUnit,
-  );
+    ctx.translate(position.x * pixelsPerUnit, position.y * pixelsPerUnit);
+    ctx.beginPath();
+    ctx.rect(
+      -halfSize.x * pixelsPerUnit,
+      -halfSize.y * pixelsPerUnit,
+      size.x * pixelsPerUnit,
+      size.y * pixelsPerUnit,
+    );
 
-  ctx.fill();
-  ctx.stroke();
+    ctx.fill();
+    ctx.stroke();
+  }
   ctx.restore();
 }
