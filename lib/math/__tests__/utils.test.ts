@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 
 import { transformRange, clamp, lerp, lerpClamped } from '../utils.js';
 
-describe('Math Utilities', () => {
+describe('math/utils', () => {
   describe('clamp', () => {
     it('should return the max value if given a value greater', () => {
       expect(clamp(50, -25, 25)).toEqual(25);

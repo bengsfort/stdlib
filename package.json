@@ -9,27 +9,39 @@
   },
   "repository": "github:bengsfort/stdlib",
   "license": "MIT",
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
   "engines": {
     "node": ">=20.0.0"
   },
   "type": "module",
   "exports": {
-    "./errors/*": {
-      "default": "./dist/errors/*.js",
-      "types": "./dist/errors/*.d.ts"
+    "./diagnostics/*": {
+      "types": "./dist/diagnostics/*.d.ts",
+      "default": "./dist/diagnostics/*.js"
     },
-    "./math/*": {
-      "default": "./dist/math/*.js",
-      "types": "./dist/math/*.d.ts"
+    "./errors/*": {
+      "types": "./dist/errors/*.d.ts",
+      "default": "./dist/errors/*.js"
+    },
+    "./events/*": {
+      "types": "./dist/events/*.d.ts",
+      "default": "./dist/events/*.js"
+    },
+    "./geometry/*": {
+      "types": "./dist/geometry/*.d.ts",
+      "default": "./dist/geometry/*.js"
     },
     "./logging/*": {
-      "default": "./dist/logging/*.js",
-      "types": "./dist/logging/*.d.ts"
+      "types": "./dist/logging/*.d.ts",
+      "default": "./dist/logging/*.js"
     },
     "./logging/node/*": {
-      "default": "./dist/logging/node/*.js",
-      "types": "./dist/logging/node/*.d.ts"
+      "types": "./dist/logging/node/*.d.ts",
+      "default": "./dist/logging/node/*.js"
+    },
+    "./math/*": {
+      "types": "./dist/math/*.d.ts",
+      "default": "./dist/math/*.js"
     }
   },
   "files": [
@@ -49,6 +61,7 @@
     "clean": "rimraf ./dist/* ./.tsbuildinfo/*",
     "test": "vitest",
     "lint": "eslint",
+    "sandbox": "vite ./sandbox",
     "ci:publish": "pnpm publish -r --access public",
     "prepublishOnly": "pnpm run clean && pnpm run build"
   },
@@ -59,6 +72,8 @@
     "eslint": "^9.20.1",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.3",
+    "vite": "^6.2.2",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.6"
   }
 }
