@@ -30,6 +30,10 @@
     "./logging/node/*": {
       "default": "./dist/logging/node/*.js",
       "types": "./dist/logging/node/*.d.ts"
+    },
+    "./formatting/*": {
+      "default": "./dist/formatting/*.js",
+      "types": "./dist/formatting/*.d.ts"
     }
   },
   "files": [
