@@ -4,6 +4,7 @@ import { SandboxContext } from './context.js';
 import { InputManager } from './input/manager.js';
 import { MouseInput } from './input/mouse.js';
 import { Renderer2D } from './renderer/renderer.js';
+import { BallPhysicsScene } from './scenes/ball-physics.js';
 import { ShapeCollisionsScene } from './scenes/shape-collisions.js';
 
 import { RepeatingArray } from '@/utils/fixed-array.js';
@@ -101,7 +102,8 @@ function main(): void {
   //   mouse,
   //   input,
   // });
-  const activeScene = ShapeCollisionsScene.Create(context);
+  //const activeScene = ShapeCollisionsScene.Create(context);
+  const activeScene = new BallPhysicsScene(context);
 
   const tick = (now: number): void => {
     frameRef = requestAnimationFrame(tick);
