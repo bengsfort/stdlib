@@ -1,11 +1,11 @@
 import { makeLogger } from '@stdlib/logging/logger.js';
 
-import { SandboxContext } from './context.js';
+import { SandboxContext, Time } from './context.js';
 import { InputManager } from './input/manager.js';
 import { MouseInput } from './input/mouse.js';
 import { Renderer2D } from './renderer/renderer.js';
 import { BallPhysicsScene } from './scenes/ball-physics.js';
-import { ShapeCollisionsScene } from './scenes/shape-collisions.js';
+// import { ShapeCollisionsScene } from './scenes/shape-collisions.js';
 
 import { RepeatingArray } from '@/utils/fixed-array.js';
 
@@ -80,10 +80,11 @@ function drawFps(last100: RepeatingArray<Timing>, canvas: HTMLCanvasElement): vo
 }
 
 function main(): void {
+  const startTime = performance.now();
   let frameRef = 0;
   let frameCount = 0;
 
-  let frameStart = performance.now();
+  let frameStart = startTime;
   let updateEnd = -1;
   let drawEnd = -1;
 
@@ -91,10 +92,17 @@ function main(): void {
   const input = new InputManager();
   const mouse = new MouseInput();
   const renderer = new Renderer2D();
+  const time: Time = {
+    frameNumber: 0,
+    timeSinceStart: 0,
+    deltaTime: 0,
+    now: frameStart,
+  };
   const context: SandboxContext = {
     renderer,
     mouse,
     input,
+    time,
   };
 
   // const activeScene: Scene = createScene({
@@ -107,11 +115,14 @@ function main(): void {
 
   const tick = (now: number): void => {
     frameRef = requestAnimationFrame(tick);
-    frameCount++;
+    time.frameNumber = ++frameCount;
+    time.now = now;
+    time.timeSinceStart = now - startTime;
+    time.deltaTime = (drawEnd - frameStart) / 1000;
 
     frameStart = now;
     mouse.tick(frameCount);
-    activeScene.tick(now);
+    activeScene.tick(time);
     updateEnd = performance.now();
     renderer.render(activeScene);
     drawEnd = performance.now();

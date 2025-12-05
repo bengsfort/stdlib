@@ -6,7 +6,7 @@ import { IAABB2D, ICircle } from '@stdlib/geometry/primitives.js';
 import { transformRange } from '@stdlib/math/utils.js';
 import { Vector2 } from '@stdlib/math/vector2.js';
 
-import { SandboxContext } from '../context.js';
+import { SandboxContext, Time } from '../context.js';
 import { drawAABB } from '../drawables/aabb.js';
 import { drawCircle } from '../drawables/circle.js';
 import { drawGrid, IDrawableGrid } from '../drawables/grid.js';
@@ -119,7 +119,7 @@ export class ShapeCollisionsScene implements Scene {
     }
   }
 
-  public tick(_now: number): void {
+  public tick(_time: Time): void {
     const { mousePosition } = this.#_mouseInput;
     const worldPos = this.#_renderer.getScreenToWorldSpace(this, mousePosition);
 
