@@ -1,3 +1,7 @@
+import {
+  aabbIntersectsCircle2D,
+  circleIntersectsCircle2D,
+} from '@stdlib/geometry/collisions2d';
 import { IAABB2D, ICircle } from '@stdlib/geometry/primitives';
 import { Vector2 } from '@stdlib/math/vector2';
 
@@ -130,15 +134,27 @@ export class BallPhysicsScene implements Scene {
     if (this.#_mouseInput.getMouse1Pressed() && addBallCdEnd < time.now) {
       const { mousePosition } = this.#_mouseInput;
       const worldPos = this.#_renderer.getScreenToWorldSpace(this, mousePosition);
-      this.#spawnBall(worldPos);
+      const ball = this.#spawnBall(worldPos);
+      ball.velocity.set(-350.0, 45.0);
+      ball.direction = Vector2.Normalize(ball.velocity);
       this.#_lastBallAdded = time.now;
     }
 
     const balls = this.#_balls.splice(0, this.#_balls.length);
     for (const ball of balls) {
-      this.#physicsTick(ball, time);
-      ball.circle.position.x += ball.velocity.x;
-      ball.circle.position.y += ball.velocity.y;
+      this.#physicsTick(ball);
+
+      const nextFrameProjection: ICircle = {
+        ...ball.circle,
+        position: new Vector2(ball.circle.position),
+      };
+
+      nextFrameProjection.position.x += ball.velocity.x * time.deltaTime;
+      nextFrameProjection.position.y += ball.velocity.y * time.deltaTime;
+      this.#checkCollisions(nextFrameProjection);
+
+      ball.circle = nextFrameProjection;
+      ball.direction = Vector2.Normalize(ball.velocity);
 
       if (ball.circle.position.y > RESET_PLANE) {
         this.#_balls.push(ball);
@@ -164,6 +180,16 @@ export class BallPhysicsScene implements Scene {
 
     for (const ball of this.#_balls) {
       drawCircle(context, settings, createCircle(ball.circle));
+
+      const ballSpeed = ball.velocity.getMagnitude();
+      drawRay(context, settings, {
+        drawType: 'ray',
+        ray: {
+          position: ball.circle.position,
+          direction: ball.direction,
+        },
+        color: '#ff0000',
+      });
     }
   }
 
@@ -171,12 +197,26 @@ export class BallPhysicsScene implements Scene {
     throw new Error('Method not implemented.');
   }
 
-  #physicsTick(ball: BallState, time: Time): void {
-    ball.velocity.y += GRAVITY_CONSTANT * time.deltaTime;
+  #checkCollisions(projection: ICircle): void {
+    for (const bumper of this.#_circleBumpers) {
+      if (circleIntersectsCircle2D(projection, bumper)) {
+        console.log('COLLISION WITH CIRCLE');
+      }
+    }
+
+    for (const bumper of this.#_squareBumpers) {
+      if (aabbIntersectsCircle2D(bumper, projection)) {
+        console.log('COLLISION WITH SQUARE');
+      }
+    }
   }
 
-  #spawnBall(position: Vector2): void {
-    this.#_balls.push({
+  #physicsTick(ball: BallState): void {
+    ball.velocity.y += GRAVITY_CONSTANT;
+  }
+
+  #spawnBall(position: Vector2): BallState {
+    const state: BallState = {
       circle: {
         position,
         radius: 0.45,
@@ -186,6 +226,8 @@ export class BallPhysicsScene implements Scene {
       launchFrame: 0,
       launchStrength: 1,
       bumperBounceFrame: -1,
-    });
+    };
+    this.#_balls.push(state);
+    return state;
   }
 }
