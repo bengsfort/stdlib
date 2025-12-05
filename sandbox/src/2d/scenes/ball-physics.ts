@@ -27,6 +27,40 @@ const BALL_MAX_SPEED = 5;
 const squareBumpersPos = [new Vector2(3, 0), new Vector2(-3, -4)];
 const circleBumpersPos = [new Vector2(0, -2), new Vector2(-3, 0), new Vector2(3, -4)];
 
+/*
+public void Tick()
+{
+    for (int i = 0; i < m_LevelState.balls.Count; i++)
+    {
+        var ball = m_LevelState.balls[i];
+        if (ball == null)
+        {
+            Debug.Log("ball is null, skipping");
+            continue;
+        }
+
+        var nextVel = _BallMovement(ball);
+        ball.direction = Vector3.Normalize(nextVel);
+        ball.velocity = nextVel;
+
+        var cast = Physics2D.CircleCast(ball.worldPos, 0.25f, ball.direction, Vector2.Distance(ball.worldPos, ball.worldPos + ball.velocity);
+
+        ball.worldPos += ball.velocity * Time.deltaTime;
+    }
+}
+
+private Vector2 _BallMovement(BallState aState)
+{
+    // Todo: Need to save when they have collided with stuff last, etc..
+    // source movement depends on the user input. We don't have that.
+    var gravity = gravityStrength * Time.deltaTime * gravityDirection;
+    var next = aState.velocity + Vector2.ClampMagnitude(gravity, maxBallSpeed);
+    //var nextDir = next.normalized;
+
+    return next;
+}
+*/
+
 interface BallState {
   circle: ICircle;
   velocity: Vector2;
